@@ -3,7 +3,7 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["tgs-cli.csproj", "./"]
+COPY ["src/tgs-cli.csproj", "./"]
 RUN dotnet restore "tgs-cli.csproj"
 COPY . .
 WORKDIR "/src/"
