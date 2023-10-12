@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using CliFx;
+﻿using CliFx;
 using Microsoft.Extensions.DependencyInjection;
+using Tgstation.Server.Client;
+using Tgstation.Server.CommandLineInterface.Services;
 
 return await new CliApplicationBuilder()
     .AddCommandsFromThisAssembly()
@@ -15,6 +15,13 @@ IServiceProvider ConfigureServices(IEnumerable<Type> commands)
 {
     var services = new ServiceCollection();
 
+    // Register services here
+
+    services.AddSingleton<IServerClientFactory, ServerClientFactory>();
+    services.AddSingleton<IPreferencesManager, PreferencesManager>();
+    
+    // Register commands
+    
     foreach (var command in commands) 
         services.AddTransient(command);
 
