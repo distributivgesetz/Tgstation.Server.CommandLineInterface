@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgstation.Server.CommandLineInterface", "Tgstation.Server.CommandLineInterface.csproj", "{AE2D872A-948C-4FF4-B813-78E9C461D075}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tgs-cli", "tgs-cli.csproj", "{AE2D872A-948C-4FF4-B813-78E9C461D075}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Metafiles", "Metafiles", "{E8192920-1B47-4255-BC69-87DAEA2198AE}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
