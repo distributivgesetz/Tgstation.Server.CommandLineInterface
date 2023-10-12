@@ -2,9 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 
 return await new CliApplicationBuilder()
-    .SetExecutableName("tgs-cli") // :3c
-    .UseTypeActivator(ConfigureServices)
     .AddCommandsFromThisAssembly()
+    .UseTypeActivator(ConfigureServices)
+    .SetExecutableName("tgs-cli") // :3c
+    .SetDescription("Command line interface for tgstation-server")
     .Build()
     .RunAsync();
 
