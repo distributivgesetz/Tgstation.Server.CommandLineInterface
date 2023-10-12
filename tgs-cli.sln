@@ -1,6 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tgs-cli", "tgs-cli.csproj", "{AE2D872A-948C-4FF4-B813-78E9C461D075}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tgs-cli", "src\tgs-cli.csproj", "{A9E69B94-A709-45EA-98CB-1CE4DF480B52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Metafiles", "Metafiles", "{0B9D84E6-3A93-43A2-B858-89E4DB86F9E9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		LICENSE = LICENSE
+		.gitignore = .gitignore
+		.dockerignore = .dockerignore
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +17,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AE2D872A-948C-4FF4-B813-78E9C461D075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE2D872A-948C-4FF4-B813-78E9C461D075}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE2D872A-948C-4FF4-B813-78E9C461D075}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE2D872A-948C-4FF4-B813-78E9C461D075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E69B94-A709-45EA-98CB-1CE4DF480B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E69B94-A709-45EA-98CB-1CE4DF480B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E69B94-A709-45EA-98CB-1CE4DF480B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E69B94-A709-45EA-98CB-1CE4DF480B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
