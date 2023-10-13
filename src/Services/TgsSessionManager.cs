@@ -1,8 +1,8 @@
-﻿using Tgstation.Server.Api.Models;
-using Tgstation.Server.Api.Models.Response;
-using Tgstation.Server.Client;
-
 namespace Tgstation.Server.CommandLineInterface.Services;
+
+using Api.Models;
+using Api.Models.Response;
+using Client;
 
 public interface ITgsSessionManager
 {
@@ -22,21 +22,16 @@ public class TgsBadResponseException : Exception
 
 public class TgsSessionManager : ITgsSessionManager
 {
-    private readonly IServerClientFactory _serverClientFactory;
-    private readonly IRemoteRegistry _remotes;
+    private readonly IServerClientFactory serverClientFactory;
 
-    public TgsSessionManager(IServerClientFactory serverClientFactory, IRemoteRegistry remotes)
-    {
-        _serverClientFactory = serverClientFactory;
-        _remotes = remotes;
-    }
+    public TgsSessionManager(IServerClientFactory serverClientFactory) => this.serverClientFactory = serverClientFactory;
 
     public async Task<ServerInformationResponse> PingServer(Uri host)
     {
         ServerInformationResponse res;
         try
         {
-            res = await _serverClientFactory.GetServerInformation(host);
+            res = await this.serverClientFactory.GetServerInformation(host);
         }
         catch (HttpRequestException e)
         {

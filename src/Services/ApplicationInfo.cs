@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-
 namespace Tgstation.Server.CommandLineInterface.Services;
+
+using System.Reflection;
 
 public interface IApplicationInfo
 {
@@ -11,7 +11,7 @@ public interface IApplicationInfo
 public class ApplicationInfo : IApplicationInfo
 {
     public const string ApplicationName = "TGS-CLI";
-    
+
     public string Name => ApplicationName;
     public Version Version { get; } = Assembly.GetExecutingAssembly().GetName().Version!;
 }

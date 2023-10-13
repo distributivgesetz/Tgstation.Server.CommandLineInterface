@@ -1,8 +1,10 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global UnusedType.Global ClassNeverInstantiated.Global
+
+namespace Tgstation.Server.CommandLineInterface.Commands;
+
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-
-namespace Tgstation.Server.CommandLineInterface.Commands;
 
 [Command("echo")]
 public class HelloWorld : ICommand

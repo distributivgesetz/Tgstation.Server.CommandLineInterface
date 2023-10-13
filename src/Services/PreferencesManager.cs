@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-
 namespace Tgstation.Server.CommandLineInterface.Services;
+
+using Newtonsoft.Json;
 
 public interface IPreferencesManager
 {
@@ -12,11 +12,11 @@ public interface IPreferencesManager
 
 public class PreferencesManager : IPreferencesManager
 {
-    readonly Dictionary<Type, string> _typeToPrefsFilename = new();
+    private readonly Dictionary<Type, string> typeToPrefsFilename = new();
 
     private string GetFileName(Type t)
     {
-        if (_typeToPrefsFilename.TryGetValue(t, out var name))
+        if (this.typeToPrefsFilename.TryGetValue(t, out var name))
         {
             return name;
         }
@@ -28,19 +28,19 @@ public class PreferencesManager : IPreferencesManager
             throw new ArgumentException("Preferences does not have a file descriptor");
         }
 
-        if (_typeToPrefsFilename.ContainsValue(attr.Name))
+        if (this.typeToPrefsFilename.ContainsValue(attr.Name))
         {
             throw new InvalidOperationException($"Duplicate preferences file definition found, type is {t.FullName}");
         }
 
-        _typeToPrefsFilename.Add(t, attr.Name);
+        this.typeToPrefsFilename.Add(t, attr.Name);
 
-        return _typeToPrefsFilename[t];
+        return this.typeToPrefsFilename[t];
     }
 
     public T? ReadPrefs<T>() where T : new()
     {
-        var filePath = GetFileName(typeof(T));
+        var filePath = this.GetFileName(typeof(T));
 
         return !File.Exists(filePath)
             ? new T()
@@ -50,18 +50,15 @@ public class PreferencesManager : IPreferencesManager
     public void WritePrefs<T>(T prefs) where T : new()
     {
         var serialized = JsonConvert.SerializeObject(prefs);
-        var filePath = GetFileName(typeof(T));
+        var filePath = this.GetFileName(typeof(T));
         File.WriteAllText(filePath, serialized);
     }
 
-    public ValueTask<T?> ReadPrefsAsync<T>() where T : new()
-    {
-        return ValueTask.FromResult(ReadPrefs<T>());
-    }
+    public ValueTask<T?> ReadPrefsAsync<T>() where T : new() => ValueTask.FromResult(this.ReadPrefs<T>());
 
     public ValueTask WritePrefsAsync<T>(T prefs) where T : new()
     {
-        WritePrefs(prefs);
+        this.WritePrefs(prefs);
         return ValueTask.CompletedTask;
     }
 }
@@ -71,8 +68,5 @@ public class PreferencesAttribute : Attribute
 {
     public string Name { get; }
 
-    public PreferencesAttribute(string name)
-    {
-        Name = name;
-    }
+    public PreferencesAttribute(string name) => this.Name = name;
 }

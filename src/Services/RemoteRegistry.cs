@@ -1,6 +1,6 @@
-﻿using Tgstation.Server.CommandLineInterface.Preferences;
-
 namespace Tgstation.Server.CommandLineInterface.Services;
+
+using Preferences;
 
 public interface IRemoteRegistry
 {
@@ -15,23 +15,24 @@ public interface IRemoteRegistry
 
 public class RemoteRegistry : IRemoteRegistry
 {
-    private readonly IPreferencesManager _preferences;
-    private RemotesPreferences _remotes;
-    public TgsRemote? CurrentRemote => _remotes.Current != null ? _remotes.Remotes[_remotes.Current] : null;
-    public IReadOnlyCollection<string> AvailableRemotes => _remotes.Remotes.Keys;
+    private readonly IPreferencesManager preferences;
+    private RemotesPreferences remotes;
+
+    public TgsRemote? CurrentRemote => this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
+    public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
 
     public RemoteRegistry(IPreferencesManager prefs)
     {
-        _preferences = prefs;
-        _remotes = _preferences.ReadPrefs<RemotesPreferences>();
+        this.preferences = prefs;
+        this.remotes = this.preferences.ReadPrefs<RemotesPreferences>();
     }
-    
-    public void AddRemote(string name, Uri uri) => _remotes.Remotes.Add(name, new TgsRemote(name, uri));
 
-    public bool ContainsRemote(string name) => _remotes.Remotes.ContainsKey(name);
+    public void AddRemote(string name, Uri uri) => this.remotes.Remotes.Add(name, new TgsRemote(name, uri));
 
-    public TgsRemote GetRemote(string name) => _remotes.Remotes[name];
-    public void SetCurrentRemote(string name) => _remotes.Current = name;
+    public bool ContainsRemote(string name) => this.remotes.Remotes.ContainsKey(name);
 
-    public void SaveRemotes() => _preferences.WritePrefs(_remotes);
+    public TgsRemote GetRemote(string name) => this.remotes.Remotes[name];
+    public void SetCurrentRemote(string name) => this.remotes.Current = name;
+
+    public void SaveRemotes() => this.preferences.WritePrefs(this.remotes);
 }
