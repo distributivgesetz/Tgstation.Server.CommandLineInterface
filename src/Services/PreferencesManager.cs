@@ -21,9 +21,10 @@ public class PreferencesManager : IPreferencesManager
             return name;
         }
 
-        if
-            (t.GetCustomAttributes(typeof(PreferencesAttribute), false).FirstOrDefault() is not PreferencesAttribute
-                 attr || attr.Name is null)
+        if (t.GetCustomAttributes(typeof(PreferencesAttribute),
+                    false)
+                .FirstOrDefault() is not PreferencesAttribute attr ||
+            attr.Name is null)
         {
             throw new ArgumentException("Preferences does not have a file descriptor");
         }

@@ -8,18 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17e32eeb-1bc6-48d8-8e55-686e07854afd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.tgs-cli/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.tgs-cli/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Commands/HelloWorld.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Commands/HelloWorld.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Commands/RemoteCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Commands/RemoteCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Commands/StatusCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Commands/StatusCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Preferences/RemotesPreferences.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Preferences/RemotesPreferences.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/ApplicationInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/ApplicationInfo.cs" afterDir="false" />
+    <list default="true" id="17e32eeb-1bc6-48d8-8e55-686e07854afd" name="Changes" comment="add editorconfig and fix ensuing chaos">
       <change beforePath="$PROJECT_DIR$/src/Services/PreferencesManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/PreferencesManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/RemoteRegistry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/RemoteRegistry.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/TgsSessionManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/TgsSessionManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +141,7 @@
       <workItem from="1697143530313" duration="3333000" />
       <workItem from="1697177338218" duration="641000" />
       <workItem from="1697184458736" duration="18004000" />
-      <workItem from="1697224554300" duration="677000" />
+      <workItem from="1697224554300" duration="1014000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit, hello world command line program">
       <option name="closed" value="true" />
@@ -177,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697224215270</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add editorconfig and fix ensuing chaos">
+      <option name="closed" value="true" />
+      <created>1697225545900</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1697225545900</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +200,8 @@
     <MESSAGE value="slapping a readme and license in here for good measure" />
     <MESSAGE value="full remote registry support" />
     <MESSAGE value="basic but functional remote registry support" />
-    <option name="LAST_COMMIT_MESSAGE" value="basic but functional remote registry support" />
+    <MESSAGE value="add editorconfig and fix ensuing chaos" />
+    <option name="LAST_COMMIT_MESSAGE" value="add editorconfig and fix ensuing chaos" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
