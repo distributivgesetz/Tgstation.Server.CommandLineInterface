@@ -3,7 +3,7 @@ namespace Tgstation.Server.CommandLineInterface.Preferences;
 using Newtonsoft.Json;
 using Services;
 
-[Preferences("remotes")]
+[DataLocation("remotes")]
 public record struct RemotesPreferences
 {
     public Dictionary<string, TgsRemote> Remotes { get; }

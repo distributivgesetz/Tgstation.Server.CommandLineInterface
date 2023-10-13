@@ -26,7 +26,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
         return new ServerClientFactory(new ProductHeaderValue(appInfo.Name, appInfo.Version.ToString()));
     });
 
-    services.AddSingleton<IPreferencesManager, PreferencesManager>();
+    services.AddSingleton<IPersistenceManager, PersistenceManager>();
     services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
     services.AddSingleton<ITgsSessionManager, TgsSessionManager>();
 

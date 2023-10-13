@@ -2,15 +2,15 @@ namespace Tgstation.Server.CommandLineInterface.Services;
 
 using Newtonsoft.Json;
 
-public interface IPreferencesManager
+public interface IPersistenceManager
 {
-    T? ReadPrefs<T>() where T : new();
-    void WritePrefs<T>(T prefs) where T : new();
-    ValueTask<T?> ReadPrefsAsync<T>() where T : new();
-    ValueTask WritePrefsAsync<T>(T prefs) where T : new();
+    T? ReadData<T>() where T : new();
+    void WriteData<T>(T prefs) where T : new();
+    ValueTask<T?> ReadDataAsync<T>() where T : new();
+    ValueTask WriteDataAsync<T>(T prefs) where T : new();
 }
 
-public class PreferencesManager : IPreferencesManager
+public class PersistenceManager : IPersistenceManager
 {
     private readonly Dictionary<Type, string> typeToPrefsFilename = new();
 
@@ -21,9 +21,9 @@ public class PreferencesManager : IPreferencesManager
             return name;
         }
 
-        if (t.GetCustomAttributes(typeof(PreferencesAttribute),
+        if (t.GetCustomAttributes(typeof(DataLocationAttribute),
                     false)
-                .FirstOrDefault() is not PreferencesAttribute attr ||
+                .FirstOrDefault() is not DataLocationAttribute attr ||
             attr.Name is null)
         {
             throw new ArgumentException("Preferences does not have a file descriptor");
@@ -39,7 +39,7 @@ public class PreferencesManager : IPreferencesManager
         return this.typeToPrefsFilename[t];
     }
 
-    public T? ReadPrefs<T>() where T : new()
+    public T? ReadData<T>() where T : new()
     {
         var filePath = this.GetFileName(typeof(T));
 
@@ -48,26 +48,26 @@ public class PreferencesManager : IPreferencesManager
             : JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
     }
 
-    public void WritePrefs<T>(T prefs) where T : new()
+    public void WriteData<T>(T prefs) where T : new()
     {
         var serialized = JsonConvert.SerializeObject(prefs);
         var filePath = this.GetFileName(typeof(T));
         File.WriteAllText(filePath, serialized);
     }
 
-    public ValueTask<T?> ReadPrefsAsync<T>() where T : new() => ValueTask.FromResult(this.ReadPrefs<T>());
+    public ValueTask<T?> ReadDataAsync<T>() where T : new() => ValueTask.FromResult(this.ReadData<T>());
 
-    public ValueTask WritePrefsAsync<T>(T prefs) where T : new()
+    public ValueTask WriteDataAsync<T>(T prefs) where T : new()
     {
-        this.WritePrefs(prefs);
+        this.WriteData(prefs);
         return ValueTask.CompletedTask;
     }
 }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class PreferencesAttribute : Attribute
+public class DataLocationAttribute : Attribute
 {
     public string Name { get; }
 
-    public PreferencesAttribute(string name) => this.Name = name;
+    public DataLocationAttribute(string name) => this.Name = name;
 }

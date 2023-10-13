@@ -15,16 +15,16 @@ public interface IRemoteRegistry
 
 public class RemoteRegistry : IRemoteRegistry
 {
-    private readonly IPreferencesManager preferences;
+    private readonly IPersistenceManager preferences;
     private RemotesPreferences remotes;
 
     public TgsRemote? CurrentRemote => this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
     public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
 
-    public RemoteRegistry(IPreferencesManager prefs)
+    public RemoteRegistry(IPersistenceManager prefs)
     {
         this.preferences = prefs;
-        this.remotes = this.preferences.ReadPrefs<RemotesPreferences>();
+        this.remotes = this.preferences.ReadData<RemotesPreferences>();
     }
 
     public void AddRemote(string name, Uri uri) => this.remotes.Remotes.Add(name, new TgsRemote(name, uri));
@@ -34,5 +34,5 @@ public class RemoteRegistry : IRemoteRegistry
     public TgsRemote GetRemote(string name) => this.remotes.Remotes[name];
     public void SetCurrentRemote(string name) => this.remotes.Current = name;
 
-    public void SaveRemotes() => this.preferences.WritePrefs(this.remotes);
+    public void SaveRemotes() => this.preferences.WriteData(this.remotes);
 }
