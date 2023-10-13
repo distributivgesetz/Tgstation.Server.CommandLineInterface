@@ -1,4 +1,5 @@
-﻿using CliFx;
+﻿using System.Net.Http.Headers;
+using CliFx;
 using Microsoft.Extensions.DependencyInjection;
 using Tgstation.Server.Client;
 using Tgstation.Server.CommandLineInterface.Services;
@@ -6,7 +7,7 @@ using Tgstation.Server.CommandLineInterface.Services;
 return await new CliApplicationBuilder()
     .AddCommandsFromThisAssembly()
     .UseTypeActivator(ConfigureServices)
-    .SetExecutableName("tgs-cli") // :3c
+    .SetExecutableName(ApplicationInfo.ApplicationName.ToLower())
     .SetDescription("Command line interface for tgstation-server")
     .Build()
     .RunAsync();
@@ -17,8 +18,17 @@ IServiceProvider ConfigureServices(IEnumerable<Type> commands)
 
     // Register services here
 
-    services.AddSingleton<IServerClientFactory, ServerClientFactory>();
+    services.AddSingleton<IApplicationInfo, ApplicationInfo>();
+    
+    services.AddSingleton<IServerClientFactory, ServerClientFactory>(serviceProvider =>
+    {
+        var appInfo = serviceProvider.GetRequiredService<IApplicationInfo>();
+        return new ServerClientFactory(new ProductHeaderValue(appInfo.Name, appInfo.Version.ToString()));
+    });
+    
     services.AddSingleton<IPreferencesManager, PreferencesManager>();
+    services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
+    services.AddSingleton<ITgsSessionManager, TgsSessionManager>();
     
     // Register commands
     
