@@ -7,7 +7,7 @@ using Tgstation.Server.CommandLineInterface.Services;
 return await new CliApplicationBuilder()
     .AddCommandsFromThisAssembly()
     .UseTypeActivator(ConfigureServices)
-    .SetExecutableName(ApplicationInfo.ApplicationName.ToLower(System.Globalization.CultureInfo.CurrentCulture))
+    .SetExecutableName(ApplicationInfo.ApplicationName.ToLowerInvariant())
     .SetDescription("Command line interface for tgstation-server")
     .Build()
     .RunAsync();
@@ -28,9 +28,10 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
 
     services.AddSingleton<IPersistenceManager, PersistenceManager>();
     services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
-    services.AddSingleton<ITgsSessionManager, TgsSessionManager>();
+    services.AddSingleton<ISessionManager, SessionManager>();
+    services.AddSingleton<ITgsClientManager, TgsClientManager>();
 
-    // Register commands
+    // Handle commands
 
     foreach (var command in commands)
     {

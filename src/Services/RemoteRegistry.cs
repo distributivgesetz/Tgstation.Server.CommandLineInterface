@@ -19,6 +19,7 @@ public class RemoteRegistry : IRemoteRegistry
     private RemotesPreferences remotes;
 
     public TgsRemote? CurrentRemote => this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
+
     public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
 
     public RemoteRegistry(IPersistenceManager prefs)
@@ -32,6 +33,7 @@ public class RemoteRegistry : IRemoteRegistry
     public bool ContainsRemote(string name) => this.remotes.Remotes.ContainsKey(name);
 
     public TgsRemote GetRemote(string name) => this.remotes.Remotes[name];
+
     public void SetCurrentRemote(string name) => this.remotes.Current = name;
 
     public void SaveRemotes() => this.preferences.WriteData(this.remotes);

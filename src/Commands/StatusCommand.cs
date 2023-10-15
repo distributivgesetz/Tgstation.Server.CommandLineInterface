@@ -2,10 +2,8 @@ namespace Tgstation.Server.CommandLineInterface.Commands;
 
 using System.Globalization;
 using System.Text;
-using Api.Models.Response;
 using CliFx;
 using CliFx.Attributes;
-using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Services;
 
@@ -14,10 +12,10 @@ using Services;
 [Command("status")]
 public class StatusCommand : ICommand
 {
-    private readonly ITgsSessionManager manager;
+    private readonly ITgsClientManager manager;
     private readonly IRemoteRegistry remotes;
 
-    public StatusCommand(IRemoteRegistry remotes, ITgsSessionManager manager)
+    public StatusCommand(IRemoteRegistry remotes, ITgsClientManager manager)
     {
         this.manager = manager;
         this.remotes = remotes;
@@ -25,25 +23,11 @@ public class StatusCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        if (this.remotes.CurrentRemote == null)
-        {
-            throw new CliFxException(RemoteCommand.RemoteUnsetErrorMessage);
-        }
-
-        ServerInformationResponse res;
+        var currentRemote = this.GetCurrentRemote(this.remotes);
 
         await console.Output.WriteLineAsync("Fetching server status...");
 
-        try
-        {
-            res = await this.manager.PingServer(this.remotes.CurrentRemote.Value.Host);
-        }
-        catch (TgsBadResponseException e)
-        {
-            throw new CliFxException("Could not fetch server status.", innerException: e);
-        }
-
-        var currentRemote = this.remotes.CurrentRemote.Value;
+        var res = await this.TryMakeRequest(() => this.manager.PingServer(currentRemote.Host));
 
         var statusReadout = new StringBuilder();
 

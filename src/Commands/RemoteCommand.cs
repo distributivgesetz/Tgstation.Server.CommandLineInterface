@@ -2,6 +2,7 @@
 
 namespace Tgstation.Server.CommandLineInterface.Commands;
 
+using Client;
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
@@ -77,7 +78,7 @@ public class RemoteListCommand : ICommand
 public class RemoteAddCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
-    private readonly ITgsSessionManager tgsManager;
+    private readonly ITgsClientManager tgsManager;
 
     [CommandParameter(0, Description = "The name to use for this remote.")]
     public required string Name { get; init; }
@@ -85,7 +86,7 @@ public class RemoteAddCommand : ICommand
     [CommandParameter(1, Description = "The URL of the server's API.")]
     public required string Url { get; init; }
 
-    public RemoteAddCommand(IRemoteRegistry remotes, ITgsSessionManager tgsManager)
+    public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
     {
         this.remotes = remotes;
         this.tgsManager = tgsManager;
@@ -116,9 +117,9 @@ public class RemoteAddCommand : ICommand
 
         try
         {
-            await this.tgsManager.PingServer(uri);
+            await this.TryMakeRequest(() => this.tgsManager.PingServer(uri));
         }
-        catch (TgsBadResponseException e)
+        catch (ApiException e)
         {
             throw new CliFxException(
                 $"Cannot add this remote because the API could not contact the given server.\n{e.Message}");
