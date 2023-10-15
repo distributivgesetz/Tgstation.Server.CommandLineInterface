@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Services;
+namespace Tgstation.Server.CommandLineInterface.Services;
 
 using System.Text;
 using Client;

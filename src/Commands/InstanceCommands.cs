@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands;
+namespace Tgstation.Server.CommandLineInterface.Commands;
 
 using CliFx;
 using CliFx.Attributes;
@@ -20,9 +20,6 @@ public class ListInstancesCommand : ICommand
     public async ValueTask ExecuteAsync(IConsole console)
     {
         this.FailIfNoRemote(this.remotes);
-        await this.TryMakeRequest(async () =>
-        {
-            throw new NotImplementedException();
-        });
+        await this.TryMakeRequest(async () => throw new NotImplementedException());
     }
 }

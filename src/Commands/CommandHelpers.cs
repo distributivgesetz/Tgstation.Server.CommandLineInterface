@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands;
+namespace Tgstation.Server.CommandLineInterface.Commands;
 
 using CliFx;
 using CliFx.Exceptions;

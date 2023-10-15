@@ -24,7 +24,7 @@ public class TgsClientManager : ITgsClientManager
         CancellationToken cancellationToken = default)
     {
         var client = this.serverClientFactory.CreateFromToken(host,
-            new TokenResponse {Bearer = token, ExpiresAt = expiry});
+            new TokenResponse { Bearer = token, ExpiresAt = expiry });
 
         // try interacting with the api to see if the token works, just in case
         await client.ServerInformation(cancellationToken);
