@@ -32,7 +32,7 @@ public class RemoteAddCommand : ICommand
 
         if (this.remotes.ContainsRemote(this.Name))
         {
-            throw new CliFxException(
+            throw new CommandException(
                 "Cannot register remote because another one with the same name already exists. " +
                 "(Did you mean to use \"tgs remote rename\"?)");
         }
@@ -40,7 +40,7 @@ public class RemoteAddCommand : ICommand
         if (!Uri.TryCreate(this.Url, UriKind.Absolute, out var uri) ||
             (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) || uri.Query != "")
         {
-            throw new CliFxException(
+            throw new CommandException(
                 "Cannot use given URL because it is not valid. " +
                 "Please use a complete HTTP/S URL, without a query string.");
         }
@@ -55,7 +55,7 @@ public class RemoteAddCommand : ICommand
         }
         catch (ApiException e)
         {
-            throw new CliFxException(
+            throw new CommandException(
                 $"Cannot add this remote because the API could not contact the given server.\n{e.Message}");
         }
 

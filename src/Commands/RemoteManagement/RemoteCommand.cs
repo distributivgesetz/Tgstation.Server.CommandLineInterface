@@ -38,7 +38,7 @@ public class RemoteCommand : BaseCommand
 
             if (!this.remotes.ContainsRemote(this.Name))
             {
-                throw new CliFxException("This remote has not been registered before.");
+                throw new CommandException("This remote has not been registered before.");
             }
 
             this.remotes.SetCurrentRemote(this.Name);
