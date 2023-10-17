@@ -46,6 +46,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
     services.UseMiddlewares(builder =>
     {
         builder.AddMiddleware<ConnectionFailureMiddleware>();
+        builder.AddMiddleware<EnsureCurrentSessionMiddleware>();
         return builder.Build();
     });
 

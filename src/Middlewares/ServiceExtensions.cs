@@ -8,7 +8,7 @@ public static class ServiceExtensions
     public static IServiceCollection UseMiddlewares(this IServiceCollection container,
         Func<IMiddlewarePipelineBuilder, IMiddlewarePipeline> configure)
     {
-        container.AddSingleton<IMiddlewarePipelineConfigurator>(services =>
+        container.AddSingleton<IMiddlewarePipeline>(services =>
         {
             var builder = ActivatorUtilities.CreateInstance<MiddlewarePipelineBuilder>(services);
             return configure(builder);
