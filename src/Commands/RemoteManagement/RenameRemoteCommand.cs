@@ -1,4 +1,4 @@
-namespace Tgstation.Server.CommandLineInterface.Commands.Remotes;
+namespace Tgstation.Server.CommandLineInterface.Commands.RemoteManagement;
 
 using CliFx;
 using CliFx.Attributes;

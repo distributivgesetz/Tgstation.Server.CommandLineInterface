@@ -1,4 +1,4 @@
-namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
+namespace Tgstation.Server.CommandLineInterface.Commands.InstanceManagement;
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
