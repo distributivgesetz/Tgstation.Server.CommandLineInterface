@@ -22,6 +22,8 @@ public class ListInstancesCommand : BaseCommand
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
 
-    protected override async ValueTask RunCommandAsync(IConsole console) =>
-        await this.TryMakeRequest(async () => throw new NotImplementedException());
+    protected override async ValueTask RunCommandAsync(IConsole console)
+    {
+        var currentRemote = this.remotes.GetCurrentRemote();
+    }
 }

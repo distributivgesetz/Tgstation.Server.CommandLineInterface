@@ -24,7 +24,7 @@ public class LoginCommand : BaseCommand
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var remote = this.remotes.CurrentRemote!.Value;
+        var remote = this.remotes.GetCurrentRemote();
 
         if (this.sessions.HasSession(remote.Name))
         {
@@ -52,7 +52,7 @@ public class LogoutCommand : BaseCommand
 
     protected override ValueTask RunCommandAsync(IConsole console)
     {
-        var currentRemote = this.remotes.CurrentRemote!.Value;
+        var currentRemote = this.remotes.GetCurrentRemote();
         if (!this.sessions.HasSession(currentRemote.Name))
         {
             return default;

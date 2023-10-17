@@ -1,7 +1,6 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Middlewares;
+namespace Tgstation.Server.CommandLineInterface.Middlewares;
 
 using JetBrains.Annotations;
-using Services;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public interface ICommandMiddleware

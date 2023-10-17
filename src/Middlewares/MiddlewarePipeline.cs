@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Middlewares;
+namespace Tgstation.Server.CommandLineInterface.Middlewares;
 
 using CliFx.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,7 +82,7 @@ public class MiddlewarePipeline : IMiddlewarePipeline
         return next();
     }
 
-    private class MiddlewareContext : IMiddlewareContext
+    private sealed class MiddlewareContext : IMiddlewareContext
     {
         public MiddlewareContext(IConsole console) => this.Console = console;
 

@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Middlewares;
+namespace Tgstation.Server.CommandLineInterface.Middlewares;
 
 using Commands;
 using Microsoft.Extensions.DependencyInjection;

@@ -26,7 +26,7 @@ public class StatusCommand : BaseCommand
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var currentRemote = this.remotes.CurrentRemote!.Value;
+        var currentRemote = this.remotes.GetCurrentRemote();
 
         await console.Output.WriteLineAsync("Fetching server status...");
 

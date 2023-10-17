@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
+namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 
 using CliFx.Exceptions;
 using Commands;
@@ -12,7 +12,7 @@ public class EnsureCurrentSessionMiddleware : ICommandMiddleware
 
     public ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep)
     {
-        if (this.remotes.CurrentRemote == null)
+        if (!this.remotes.HasCurrentRemote())
         {
             throw new CommandException(RemoteCommand.RemoteUnsetErrorMessage);
         }

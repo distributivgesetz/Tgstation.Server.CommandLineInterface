@@ -42,7 +42,7 @@ public class SessionManager : ISessionManager
 
     public async Task<IServerClient> TryResumeSession(CancellationToken cancellationToken = default)
     {
-        var currentRemote = this.GetCurrentRemote();
+        var currentRemote = this.remotes.GetCurrentRemote();
 
         if (!this.Sessions.Sessions.TryGetValue(currentRemote.Name, out var authSession))
         {
@@ -63,7 +63,7 @@ public class SessionManager : ISessionManager
     public async Task<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
         CancellationToken cancellationToken = default)
     {
-        var currentRemote = this.GetCurrentRemote();
+        var currentRemote = this.remotes.GetCurrentRemote();
 
         var username = ReadLoginInput(console, "Username: ", false);
         var password = ReadLoginInput(console, "Password: ", true);
@@ -103,8 +103,6 @@ public class SessionManager : ISessionManager
     }
 
     public void SaveSessions() => this.prefs.WriteData(this.Sessions);
-
-    private TgsRemote GetCurrentRemote() => this.remotes.CurrentRemote!.Value;
 
     private static string ReadLoginInput(IConsole console, string prompt, bool hidden)
     {

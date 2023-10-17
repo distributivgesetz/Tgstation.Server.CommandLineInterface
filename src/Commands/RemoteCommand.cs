@@ -27,13 +27,13 @@ public class RemoteCommand : BaseCommand
     {
         if (this.Name == null)
         {
-            console.Output.WriteLine(this.remotes.CurrentRemote != null
-                ? this.remotes.CurrentRemote.Value.Name
+            console.Output.WriteLine(this.remotes.HasCurrentRemote()
+                ? this.remotes.GetCurrentRemote().Name
                 : "No remote currently in use.");
         }
         else
         {
-            if (this.remotes.CurrentRemote?.Name == this.Name)
+            if (this.remotes.GetCurrentRemote().Name == this.Name)
             {
                 return default;
             }
