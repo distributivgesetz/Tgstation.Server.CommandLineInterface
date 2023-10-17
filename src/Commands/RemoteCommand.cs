@@ -1,5 +1,3 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global UnusedType.Global ClassNeverInstantiated.Global
-
 namespace Tgstation.Server.CommandLineInterface.Commands;
 
 using Client;
@@ -7,10 +5,12 @@ using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
+using JetBrains.Annotations;
 using Services;
 
 [Command("remote",
-    Description = "Displays the currently used remote. If a name param is given, tries to set the current remote.")]
+     Description = "Displays the currently used remote. If a name param is given, tries to set the current remote."),
+ UsedImplicitly]
 public class RemoteCommand : BaseCommand
 {
     public const string RemoteUnsetErrorMessage =
@@ -53,7 +53,7 @@ public class RemoteCommand : BaseCommand
     protected override ValueTask RunCommandAsync(IConsole console) => default;
 }
 
-[Command("remote list", Description = "List available remotes.")]
+[Command("remote list", Description = "List available remotes."), UsedImplicitly]
 public class RemoteListCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
@@ -72,11 +72,12 @@ public class RemoteListCommand : ICommand
         {
             console.Output.WriteLine(remoteKey);
         }
+
         return default;
     }
 }
 
-[Command("remote add", Description = "Adds a remote.")]
+[Command("remote add", Description = "Adds a remote."), UsedImplicitly]
 public class RemoteAddCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;

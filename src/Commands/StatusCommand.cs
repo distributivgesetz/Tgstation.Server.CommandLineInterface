@@ -2,15 +2,15 @@ namespace Tgstation.Server.CommandLineInterface.Commands;
 
 using System.Globalization;
 using System.Text;
-using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
+using JetBrains.Annotations;
+using Middlewares;
+using Middlewares.Implementations;
 using Services;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global UnusedType.Global ClassNeverInstantiated.Global
-
-[Command("status")]
-public class StatusCommand : ICommand
+[Command("status"), UsedImplicitly]
+public class StatusCommand : BaseCommand
 {
     private readonly ITgsClientManager manager;
     private readonly IRemoteRegistry remotes;
@@ -21,9 +21,12 @@ public class StatusCommand : ICommand
         this.remotes = remotes;
     }
 
-    public async ValueTask ExecuteAsync(IConsole console)
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
+        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>(this.remotes);
+
+    protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var currentRemote = this.GetCurrentRemote(this.remotes);
+        var currentRemote = this.remotes.CurrentRemote!.Value;
 
         await console.Output.WriteLineAsync("Fetching server status...");
 

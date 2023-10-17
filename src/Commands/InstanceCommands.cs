@@ -1,12 +1,14 @@
 namespace Tgstation.Server.CommandLineInterface.Commands;
 
-using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
+using JetBrains.Annotations;
+using Middlewares;
+using Middlewares.Implementations;
 using Services;
 
-[Command("instances list")]
-public class ListInstancesCommand : ICommand
+[Command("instances list"), UsedImplicitly]
+public class ListInstancesCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
     private readonly ISessionManager sessions;
@@ -17,9 +19,9 @@ public class ListInstancesCommand : ICommand
         this.sessions = sessions;
     }
 
-    public async ValueTask ExecuteAsync(IConsole console)
-    {
-        this.FailIfNoRemote(this.remotes);
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
+        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+
+    protected override async ValueTask RunCommandAsync(IConsole console) =>
         await this.TryMakeRequest(async () => throw new NotImplementedException());
-    }
 }

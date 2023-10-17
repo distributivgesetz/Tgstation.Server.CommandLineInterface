@@ -1,12 +1,14 @@
 namespace Tgstation.Server.CommandLineInterface.Commands;
 
-using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
+using JetBrains.Annotations;
+using Middlewares;
+using Middlewares.Implementations;
 using Services;
 
-[Command("login")]
-public class LoginCommand : ICommand
+[Command("login"), UsedImplicitly]
+public class LoginCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
     private readonly ISessionManager sessions;
@@ -17,21 +19,24 @@ public class LoginCommand : ICommand
         this.sessions = sessions;
     }
 
-    public async ValueTask ExecuteAsync(IConsole console)
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
+        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+
+    protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var remote = this.GetCurrentRemote(this.remotes);
+        var remote = this.remotes.CurrentRemote!.Value;
 
         if (this.sessions.HasSession(remote.Name))
         {
             await console.Output.WriteLineAsync($"Using session for {remote.Name}.");
         }
 
-        var client = await this.sessions.LoginToSession(console);
+        await this.sessions.LoginToSession(console);
     }
 }
 
-[Command("logout")]
-public class LogoutCommand : ICommand
+[Command("logout"), UsedImplicitly]
+public class LogoutCommand : BaseCommand
 {
     private readonly ISessionManager sessions;
     private readonly IRemoteRegistry remotes;
@@ -42,9 +47,12 @@ public class LogoutCommand : ICommand
         this.remotes = remotes;
     }
 
-    public ValueTask ExecuteAsync(IConsole console)
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
+        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+
+    protected override ValueTask RunCommandAsync(IConsole console)
     {
-        var currentRemote = this.GetCurrentRemote(this.remotes);
+        var currentRemote = this.remotes.CurrentRemote!.Value;
         if (!this.sessions.HasSession(currentRemote.Name))
         {
             return default;
