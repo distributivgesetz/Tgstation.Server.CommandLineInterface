@@ -11,7 +11,7 @@ using Services;
 
 [Command("remote",
     Description = "Displays the currently used remote. If a name param is given, tries to set the current remote.")]
-public class RemoteCommand : ICommand
+public class RemoteCommand : BaseCommand
 {
     public const string RemoteUnsetErrorMessage =
         "No remote has been registered, check \"tgs remote add --help\" for more details.";
@@ -49,6 +49,8 @@ public class RemoteCommand : ICommand
 
         return default;
     }
+
+    protected override ValueTask RunCommandAsync(IConsole console) => default;
 }
 
 [Command("remote list", Description = "List available remotes.")]
