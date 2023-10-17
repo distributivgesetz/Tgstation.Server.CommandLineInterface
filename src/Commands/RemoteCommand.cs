@@ -19,11 +19,11 @@ public class RemoteCommand : BaseCommand
     private readonly IRemoteRegistry remotes;
 
     [CommandParameter(0, Description = "Sets the currently used remote.", IsRequired = false)]
-    public string? Name { get; init; }
+    public string? Name { get; [UsedImplicitly] init; }
 
     public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
 
-    public ValueTask ExecuteAsync(IConsole console)
+    protected override ValueTask RunCommandAsync(IConsole console)
     {
         if (this.Name == null)
         {
@@ -33,7 +33,7 @@ public class RemoteCommand : BaseCommand
         }
         else
         {
-            if (this.remotes.GetCurrentRemote().Name == this.Name)
+            if (this.remotes.HasCurrentRemote() && this.remotes.GetCurrentRemote().Name == this.Name)
             {
                 return default;
             }
@@ -49,8 +49,6 @@ public class RemoteCommand : BaseCommand
 
         return default;
     }
-
-    protected override ValueTask RunCommandAsync(IConsole console) => default;
 }
 
 [Command("remote list", Description = "List available remotes."), UsedImplicitly]
@@ -84,10 +82,10 @@ public class RemoteAddCommand : ICommand
     private readonly ITgsClientManager tgsManager;
 
     [CommandParameter(0, Description = "The name to use for this remote.")]
-    public required string Name { get; init; }
+    public required string Name { get; [UsedImplicitly] init; }
 
     [CommandParameter(1, Description = "The URL of the server's API.")]
-    public required string Url { get; init; }
+    public required string Url { get; [UsedImplicitly] init; }
 
     public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
     {
@@ -120,7 +118,7 @@ public class RemoteAddCommand : ICommand
 
         try
         {
-            await this.TryMakeRequest(() => this.tgsManager.PingServer(uri));
+            await this.tgsManager.PingServer(uri);
         }
         catch (ApiException e)
         {

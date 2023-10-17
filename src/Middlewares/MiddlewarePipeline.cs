@@ -3,30 +3,9 @@ namespace Tgstation.Server.CommandLineInterface.Middlewares;
 using CliFx.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-public interface IMiddlewarePipelineBuilder
-{
-    void AddMiddleware<T>() where T : ICommandMiddleware;
-    IMiddlewarePipeline Build();
-}
-
-public class MiddlewarePipelineBuilder : IMiddlewarePipelineBuilder
-{
-    private readonly IList<Type> registeredTypes = new List<Type>();
-
-    private readonly IServiceProvider provider;
-
-    public MiddlewarePipelineBuilder(IServiceProvider provider) => this.provider = provider;
-
-    public void AddMiddleware<T>() where T : ICommandMiddleware =>
-        this.registeredTypes.Add(typeof(T));
-
-    public IMiddlewarePipeline Build() =>
-        ActivatorUtilities.CreateInstance<MiddlewarePipeline>(this.provider, this.registeredTypes);
-}
-
 public interface IMiddlewarePipelineConfigurator
 {
-    void UseMiddleware<T>(params object[] arguments) where T : ICommandMiddleware;
+    void UseMiddleware<T>() where T : ICommandMiddleware;
 }
 
 public interface IMiddlewarePipelineRunner
@@ -45,26 +24,13 @@ public interface IMiddlewareContext
 
 public class MiddlewarePipeline : IMiddlewarePipeline
 {
-    private readonly IList<Type> availableMiddlewares;
     private readonly IServiceProvider provider;
     private readonly List<ICommandMiddleware> middlewaresInUse = new();
 
-    public MiddlewarePipeline(IList<Type> middlewares, IServiceProvider provider)
-    {
-        this.availableMiddlewares = middlewares;
-        this.provider = provider;
-    }
+    public MiddlewarePipeline(IServiceProvider provider) => this.provider = provider;
 
-    public void UseMiddleware<T>(params object[] arguments) where T : ICommandMiddleware
-    {
-        if (!this.availableMiddlewares.Contains(typeof(T)))
-        {
-            throw new ArgumentException("Middleware not registered", nameof(T));
-        }
-
-        this.middlewaresInUse.Add(
-            (ICommandMiddleware)ActivatorUtilities.CreateInstance(this.provider, typeof(T), arguments));
-    }
+    public void UseMiddleware<T>() where T : ICommandMiddleware =>
+        this.middlewaresInUse.Add((ICommandMiddleware)ActivatorUtilities.CreateInstance(this.provider, typeof(T)));
 
     public ValueTask RunAsync(IConsole console, Func<IConsole, ValueTask> commandMain)
     {

@@ -53,6 +53,7 @@ public class LogoutCommand : BaseCommand
     protected override ValueTask RunCommandAsync(IConsole console)
     {
         var currentRemote = this.remotes.GetCurrentRemote();
+
         if (!this.sessions.HasSession(currentRemote.Name))
         {
             return default;

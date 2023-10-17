@@ -7,21 +7,15 @@ using Preferences;
 
 public interface ISessionManager
 {
-    Task<IServerClient> TryResumeSession(CancellationToken cancellationToken = default);
+    ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default);
+    ValueTask<IServerClient> ResumeSessionOrReprompt(IConsole console, CancellationToken token = default);
     bool HasSession(string remoteKey);
 
-    Task<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
+    ValueTask<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
         CancellationToken cancellationToken = default);
 
     void DropSession(string key);
     void SaveSessions();
-}
-
-public class BadSessionException : Exception
-{
-    public BadSessionException(string? message, Exception? innerException = null) : base(message, innerException)
-    {
-    }
 }
 
 public class SessionManager : ISessionManager
@@ -40,45 +34,69 @@ public class SessionManager : ISessionManager
         this.Sessions = prefs.ReadData<SessionPersistence>();
     }
 
-    public async Task<IServerClient> TryResumeSession(CancellationToken cancellationToken = default)
+    public async ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default)
     {
         var currentRemote = this.remotes.GetCurrentRemote();
 
         if (!this.Sessions.Sessions.TryGetValue(currentRemote.Name, out var authSession))
         {
-            throw new BadSessionException("Session does not exist");
+            return null;
         }
 
         if (authSession.ExpiryDate < DateTime.Now)
         {
-            throw new BadSessionException("Session has expired");
+            return null;
         }
 
-        return await this.clientFactory.CreateSessionWithToken(currentRemote.Host, authSession.Token,
-            authSession.ExpiryDate, cancellationToken);
+        try
+        {
+            return await this.clientFactory.CreateSessionWithToken(currentRemote.Host, authSession.Token,
+                authSession.ExpiryDate, token);
+        }
+        catch (ApiException)
+        {
+            // ignored
+        }
+
+        return null;
+    }
+
+    public async ValueTask<IServerClient> ResumeSessionOrReprompt(IConsole console, CancellationToken token = default)
+    {
+        var client = await this.TryResumeSession(token);
+
+        if (client != null)
+        {
+            return client;
+        }
+
+        return await this.LoginToSession(console, cancellationToken: token);
     }
 
     public bool HasSession(string remoteKey) => this.Sessions.Sessions.ContainsKey(remoteKey);
 
-    public async Task<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
+    public async ValueTask<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
         CancellationToken cancellationToken = default)
     {
         var currentRemote = this.remotes.GetCurrentRemote();
 
-        var username = ReadLoginInput(console, "Username: ", false);
-        var password = ReadLoginInput(console, "Password: ", true);
-
-        IServerClient client;
-
-        try
+        await console.Output.WriteAsync("Username: ");
+        var username = (await console.Input.ReadLineAsync())!;
+        if (username.Length == 0)
         {
-            client = await this.clientFactory.CreateSessionWithLogin(currentRemote.Host, username, password,
-                cancellationToken);
+            throw new BadLoginException("Please provide a username.");
         }
-        catch (ApiException e)
+
+        await console.Output.WriteAsync("Password: ");
+        var password = ReadHiddenInput(console);
+        if (password.Length == 0)
         {
-            throw new BadSessionException("Api error occurred", innerException: e);
+            throw new BadLoginException("Please provide a password.");
         }
+
+        // This should throw UnauthorizedException, which is handled in UserUnauthorizedHandler
+        var client =
+            await this.clientFactory.CreateSessionWithLogin(currentRemote.Host, username, password, cancellationToken);
 
         if (!saveSession)
         {
@@ -104,36 +122,37 @@ public class SessionManager : ISessionManager
 
     public void SaveSessions() => this.prefs.WriteData(this.Sessions);
 
-    private static string ReadLoginInput(IConsole console, string prompt, bool hidden)
+    private static string ReadHiddenInput(IConsole console)
     {
-        console.Output.Write(prompt);
         var phrase = new StringBuilder();
         ConsoleKey key;
         do
         {
-            var keyInfo = console.ReadKey(intercept: hidden);
+            var keyInfo = console.ReadKey(intercept: true);
             key = keyInfo.Key;
 
             if (key == ConsoleKey.Backspace && phrase.Length > 0)
             {
-                if (hidden)
-                {
-                    console.Output.Write("\b \b");
-                }
-
+                console.Output.Write("\b \b");
                 phrase.Length--;
             }
             else if (!char.IsControl(keyInfo.KeyChar))
             {
-                if (hidden)
-                {
-                    console.Output.Write("*");
-                }
-
+                console.Output.Write("*");
                 phrase.Append(keyInfo.KeyChar);
             }
         } while (key != ConsoleKey.Enter);
 
+        console.Output.Write(console.Output.NewLine);
+
         return phrase.ToString();
+    }
+}
+
+public class BadLoginException : Exception
+{
+    public BadLoginException(string message, Exception? innerException = null) : base(message,
+        innerException: innerException)
+    {
     }
 }

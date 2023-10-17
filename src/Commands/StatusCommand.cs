@@ -22,7 +22,7 @@ public class StatusCommand : BaseCommand
     }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>(this.remotes);
+        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
@@ -30,7 +30,7 @@ public class StatusCommand : BaseCommand
 
         await console.Output.WriteLineAsync("Fetching server status...");
 
-        var res = await this.TryMakeRequest(() => this.manager.PingServer(currentRemote.Host));
+        var res = await this.manager.PingServer(currentRemote.Host);
 
         var statusReadout = new StringBuilder();
 

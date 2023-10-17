@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using CliFx;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Tgstation.Server.Client;
 using Tgstation.Server.CommandLineInterface.Middlewares;
-using Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 using Tgstation.Server.CommandLineInterface.Services;
 
 var sw = Stopwatch.StartNew();
@@ -40,15 +40,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
     services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
     services.AddSingleton<ISessionManager, SessionManager>();
     services.AddSingleton<ITgsClientManager, TgsClientManager>();
-
-    // Handle middlewares
-
-    services.UseMiddlewares(builder =>
-    {
-        builder.AddMiddleware<ConnectionFailureMiddleware>();
-        builder.AddMiddleware<EnsureCurrentSessionMiddleware>();
-        return builder.Build();
-    });
+    services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
 
     // Handle commands
 
@@ -61,6 +53,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
 }
 
 // Fixes CA1852 in this file
+[UsedImplicitly]
 internal sealed partial class Program
 {
 }
