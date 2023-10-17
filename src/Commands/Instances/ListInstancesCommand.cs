@@ -1,4 +1,4 @@
-namespace Tgstation.Server.CommandLineInterface.Commands;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
@@ -10,14 +10,9 @@ using Services;
 [Command("list-instances"), UsedImplicitly]
 public class ListInstancesCommand : BaseCommand
 {
-    private readonly IRemoteRegistry remotes;
     private readonly ISessionManager sessions;
 
-    public ListInstancesCommand(IRemoteRegistry remotes, ISessionManager sessions)
-    {
-        this.remotes = remotes;
-        this.sessions = sessions;
-    }
+    public ListInstancesCommand(ISessionManager sessions) => this.sessions = sessions;
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {

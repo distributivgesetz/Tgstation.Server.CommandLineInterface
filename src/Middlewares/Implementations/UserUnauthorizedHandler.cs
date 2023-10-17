@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
+namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 
 using Client;
 using CliFx.Exceptions;

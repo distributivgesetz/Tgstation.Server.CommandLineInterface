@@ -1,7 +1,7 @@
 namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 
 using CliFx.Exceptions;
-using Commands;
+using Commands.Remotes;
 using Services;
 
 public class EnsureCurrentSessionMiddleware : ICommandMiddleware
