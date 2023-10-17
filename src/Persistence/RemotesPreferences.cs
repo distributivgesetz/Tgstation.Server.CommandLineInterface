@@ -1,4 +1,4 @@
-namespace Tgstation.Server.CommandLineInterface.Preferences;
+namespace Tgstation.Server.CommandLineInterface.Persistence;
 
 using Newtonsoft.Json;
 using Services;

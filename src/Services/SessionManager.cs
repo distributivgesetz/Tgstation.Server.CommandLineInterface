@@ -3,7 +3,7 @@ namespace Tgstation.Server.CommandLineInterface.Services;
 using System.Text;
 using Client;
 using CliFx.Infrastructure;
-using Preferences;
+using Persistence;
 
 public interface ISessionManager
 {

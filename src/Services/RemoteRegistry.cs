@@ -1,6 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Services;
 
-using Preferences;
+using Persistence;
 
 public interface IRemoteRegistry
 {
