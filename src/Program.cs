@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using CliFx;
 using Microsoft.Extensions.DependencyInjection;
 using Tgstation.Server.Client;
-using Tgstation.Server.CommandLineInterface.Commands;
+using Tgstation.Server.CommandLineInterface.Middlewares;
 using Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 using Tgstation.Server.CommandLineInterface.Services;
 
@@ -43,35 +43,20 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
 
     // Handle middlewares
 
-    services.UseMiddlewares(ConfigureMiddlewares);
+    services.UseMiddlewares(builder =>
+    {
+        builder.AddMiddleware<ConnectionFailureMiddleware>();
+        return builder.Build();
+    });
 
     // Handle commands
 
     foreach (var command in commands)
     {
-        services.AddTransient(command, services =>
-        {
-            var inst = ActivatorUtilities.CreateInstance(services, command);
-
-            if (!command.IsSubclassOf(typeof(BaseCommand)))
-            {
-                return inst;
-            }
-
-            var baseCommand = (BaseCommand)inst;
-            baseCommand.UseMiddlewares(services.GetRequiredService<IMiddlewarePipeline>());
-
-            return inst;
-        });
+        services.UseCommand(command);
     }
 
     return services.BuildServiceProvider();
-}
-
-static IMiddlewarePipeline ConfigureMiddlewares(IMiddlewarePipelineBuilder builder)
-{
-    builder.AddMiddleware<ConnectionFailureMiddleware>();
-    return builder.Build();
 }
 
 // Fixes CA1852 in this file

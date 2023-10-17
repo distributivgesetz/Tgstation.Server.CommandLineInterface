@@ -1,8 +1,7 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Services;
+﻿namespace Tgstation.Server.CommandLineInterface.Middlewares;
 
 using CliFx.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Middlewares;
 
 public interface IMiddlewarePipelineBuilder
 {
@@ -65,8 +64,8 @@ public class MiddlewarePipeline : IMiddlewarePipeline
         for (var index = this.registeredMiddlewares.Count - 1; index >= 0; index--)
         {
             var middleware = this.registeredMiddlewares[index];
-            var pipeline = next;
-            next = () => middleware.HandleCommandAsync(context, pipeline);
+            var current = next;
+            next = () => middleware.HandleCommandAsync(context, current);
         }
 
         return next();

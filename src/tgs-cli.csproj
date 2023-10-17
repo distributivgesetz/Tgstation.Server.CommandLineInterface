@@ -19,6 +19,4 @@
     <PackageReference Include="Tgstation.Server.Client" Version="12.1.2" />
   </ItemGroup>
 
-
-
 </Project>

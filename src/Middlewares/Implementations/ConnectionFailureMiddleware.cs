@@ -2,7 +2,6 @@
 
 using System.Net;
 using CliFx.Exceptions;
-using Services;
 
 public class ConnectionFailureMiddleware : ICommandMiddleware
 {
