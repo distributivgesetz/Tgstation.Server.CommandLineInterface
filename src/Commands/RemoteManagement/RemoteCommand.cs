@@ -11,9 +11,6 @@ using Services;
  UsedImplicitly]
 public class RemoteCommand : BaseCommand
 {
-    public const string RemoteUnsetErrorMessage =
-        "No remote has been registered, check \"tgs remote add --help\" for more details.";
-
     private readonly IRemoteRegistry remotes;
 
     [CommandParameter(0, Description = "Sets the currently used remote.", IsRequired = false)]
