@@ -8,7 +8,7 @@ using Middlewares.Implementations;
 using Services;
 
 [Command("login"), UsedImplicitly]
-public class LoginCommand : BaseCommand
+public sealed class LoginCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
     private readonly ISessionManager sessions;

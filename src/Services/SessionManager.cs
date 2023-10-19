@@ -18,7 +18,7 @@ public interface ISessionManager
     void SaveSessions();
 }
 
-public class SessionManager : ISessionManager
+public sealed class SessionManager : ISessionManager
 {
     private readonly IRemoteRegistry remotes;
     private readonly ITgsClientManager clientFactory;

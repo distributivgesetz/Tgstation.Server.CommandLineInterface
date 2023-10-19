@@ -7,7 +7,7 @@ using Models;
 using Services;
 
 [Command("instance repo clone")]
-public class RepoCloneCommand : BaseInstanceClientCommand
+public sealed class RepoCloneCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

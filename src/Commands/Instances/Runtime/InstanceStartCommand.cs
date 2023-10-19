@@ -8,7 +8,7 @@ using Services;
 using Sessions;
 
 [Command("instance start")]
-public class InstanceStartCommand : BaseSessionCommand
+public sealed class InstanceStartCommand : BaseSessionCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

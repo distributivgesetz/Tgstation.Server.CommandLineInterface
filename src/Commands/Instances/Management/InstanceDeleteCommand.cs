@@ -7,7 +7,7 @@ using Services;
 using Sessions;
 
 [Command("instance delete")]
-public class InstanceDeleteCommand : BaseSessionCommand
+public sealed class InstanceDeleteCommand : BaseSessionCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

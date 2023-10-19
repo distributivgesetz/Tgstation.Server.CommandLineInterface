@@ -9,7 +9,7 @@ using Services;
 using Sessions;
 
 [Command("list-instances"), UsedImplicitly]
-public class ListInstancesCommand : BaseSessionCommand
+public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;
 

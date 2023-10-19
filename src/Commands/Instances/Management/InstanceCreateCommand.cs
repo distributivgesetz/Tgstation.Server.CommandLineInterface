@@ -7,7 +7,7 @@ using Services;
 using Sessions;
 
 [Command("instance create")]
-public class InstanceCreateCommand : BaseSessionCommand
+public sealed class InstanceCreateCommand : BaseSessionCommand
 {
     [CommandParameter(0)]
     public required string Name { get; init; }

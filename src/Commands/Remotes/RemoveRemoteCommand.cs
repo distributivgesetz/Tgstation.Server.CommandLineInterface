@@ -5,7 +5,7 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 
 [Command("remote remove", Description = "Unregisters a remote.")]
-public class RemoveRemoteCommand : ICommand
+public sealed class RemoveRemoteCommand : ICommand
 {
     [CommandParameter(0)] public required string Name { get; init; }
 

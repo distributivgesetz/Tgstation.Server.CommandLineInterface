@@ -8,7 +8,7 @@ using Services;
 using Sessions;
 
 [Command("instance stop")]
-public class InstanceStopCommand : BaseSessionCommand
+public sealed class InstanceStopCommand : BaseSessionCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required long Id { get; init; }

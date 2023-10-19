@@ -7,7 +7,7 @@ using Models;
 using Services;
 
 [Command("instance repo")]
-public class RepoInfoCommand : BaseInstanceClientCommand
+public sealed class RepoInfoCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

@@ -14,7 +14,7 @@ public interface IRemoteRegistry
     void SaveRemotes();
 }
 
-public class RemoteRegistry : IRemoteRegistry
+public sealed class RemoteRegistry : IRemoteRegistry
 {
     private readonly IPersistenceManager preferences;
     private RemotesPreferences remotes;

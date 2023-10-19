@@ -9,7 +9,7 @@ using Services;
 [Command("remote",
      Description = "Displays the currently used remote. If a name param is given, tries to set the current remote."),
  UsedImplicitly]
-public class RemoteCommand : BaseCommand
+public sealed class RemoteCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
 

@@ -5,7 +5,7 @@ using Api.Models;
 using Api.Models.Response;
 using CliFx.Extensibility;
 
-public record InstanceSelector(long Id) : ApiConverter<Instance>
+public sealed record InstanceSelector(long Id) : ApiConverter<Instance>
 {
     protected override Instance ToApi() => new InstanceResponse {Id = this.Id};
     public static implicit operator long(InstanceSelector inst) => inst.Id;

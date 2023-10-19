@@ -10,7 +10,7 @@ public interface IPersistenceManager
     ValueTask WriteDataAsync<T>(T prefs) where T : new();
 }
 
-public class PersistenceManager : IPersistenceManager
+public sealed class PersistenceManager : IPersistenceManager
 {
     private readonly Dictionary<Type, string> typeToPrefsFilename = new();
 
@@ -65,7 +65,7 @@ public class PersistenceManager : IPersistenceManager
 }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class DataLocationAttribute : Attribute
+public sealed class DataLocationAttribute : Attribute
 {
     public string Name { get; }
 

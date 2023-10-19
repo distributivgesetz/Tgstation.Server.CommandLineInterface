@@ -22,7 +22,7 @@ public interface IMiddlewareContext
     IConsole Console { get; }
 }
 
-public class MiddlewarePipeline : IMiddlewarePipeline
+public sealed class MiddlewarePipeline : IMiddlewarePipeline
 {
     private readonly IServiceProvider provider;
     private readonly List<ICommandMiddleware> middlewaresInUse = new();

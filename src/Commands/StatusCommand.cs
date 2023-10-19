@@ -10,7 +10,7 @@ using Middlewares.Implementations;
 using Services;
 
 [Command("status"), UsedImplicitly]
-public class StatusCommand : BaseCommand
+public sealed class StatusCommand : BaseCommand
 {
     private readonly ITgsClientManager manager;
     private readonly IRemoteRegistry remotes;

@@ -14,7 +14,7 @@ public interface ITgsClientManager
         CancellationToken cancellationToken = default);
 }
 
-public class TgsClientManager : ITgsClientManager
+public sealed class TgsClientManager : ITgsClientManager
 {
     private readonly IServerClientFactory serverClientFactory;
 

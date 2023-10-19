@@ -6,7 +6,7 @@ using Models;
 using Services;
 
 [Command("instance repo delete")]
-public class RepoDeleteCommand : BaseInstanceClientCommand
+public sealed class RepoDeleteCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

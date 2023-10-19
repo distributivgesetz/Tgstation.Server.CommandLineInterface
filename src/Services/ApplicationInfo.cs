@@ -8,7 +8,7 @@ public interface IApplicationInfo
     Version Version { get; }
 }
 
-public class ApplicationInfo : IApplicationInfo
+public sealed class ApplicationInfo : IApplicationInfo
 {
     public const string ApplicationName = "TGS-CLI";
 

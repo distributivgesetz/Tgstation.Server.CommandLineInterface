@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using Services;
 
 [Command("remote list", Description = "List available remotes."), UsedImplicitly]
-public class RemoteListCommand : ICommand
+public sealed class RemoteListCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
 

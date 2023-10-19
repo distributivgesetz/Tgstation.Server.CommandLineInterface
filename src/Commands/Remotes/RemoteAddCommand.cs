@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using Services;
 
 [Command("remote add", Description = "Adds a remote."), UsedImplicitly]
-public class RemoteAddCommand : ICommand
+public sealed class RemoteAddCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
     private readonly ITgsClientManager tgsManager;
