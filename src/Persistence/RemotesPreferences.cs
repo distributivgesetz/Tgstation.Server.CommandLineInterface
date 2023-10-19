@@ -21,4 +21,4 @@ public record struct RemotesPreferences
     }
 }
 
-public record struct TgsRemote(string Name, Uri Host);
+public readonly record struct TgsRemote(string Name, Uri Host);

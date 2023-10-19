@@ -16,7 +16,7 @@ public record struct InstancesCache
     public InstancesCache(Dictionary<string, RemoteKeyToInstance> cache) => this.Cache = cache;
 }
 
-public record struct RemoteKeyToInstance(string Key, Dictionary<string, InstanceCacheItem> Instances);
+public readonly record struct RemoteKeyToInstance(string Key, Dictionary<string, InstanceCacheItem> Instances);
 
 
-public record struct InstanceCacheItem(string Name, long Id);
+public readonly record struct InstanceCacheItem(string Name, long Id);

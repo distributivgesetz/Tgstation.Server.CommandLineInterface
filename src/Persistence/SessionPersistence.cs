@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Services;
 
 [DataLocation("sessions")]
-public readonly record struct SessionPersistence
+public record struct SessionPersistence
 {
     public Dictionary<string, AuthSession> Sessions { get; }
 
@@ -16,4 +16,4 @@ public readonly record struct SessionPersistence
     public SessionPersistence(Dictionary<string, AuthSession> sessions) => this.Sessions = sessions;
 }
 
-public record struct AuthSession(string RemoteName, string Token, DateTimeOffset ExpiryDate);
+public readonly record struct AuthSession(string RemoteName, string Token, DateTimeOffset ExpiryDate);
