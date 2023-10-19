@@ -3,8 +3,6 @@
 using Api.Models.Request;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using Middlewares;
-using Middlewares.Implementations;
 using Models;
 using Services;
 using Sessions;
@@ -17,13 +15,6 @@ public class InstanceStopCommand : BaseSessionCommand
 
     public InstanceStopCommand(ISessionManager sessions) : base(sessions)
     {
-    }
-
-    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
-    {
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
-        middlewares.UseMiddleware<UserUnauthorizedHandler>();
-        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
     }
 
     protected override async ValueTask RunCommandAsync(IConsole console)

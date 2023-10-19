@@ -2,8 +2,6 @@
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using Middlewares;
-using Middlewares.Implementations;
 using Models;
 using Services;
 using Sessions;
@@ -16,13 +14,6 @@ public class InstanceDeleteCommand : BaseSessionCommand
 
     public InstanceDeleteCommand(ISessionManager sessions) : base(sessions)
     {
-    }
-
-    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
-    {
-        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
-        middlewares.UseMiddleware<UserUnauthorizedHandler>();
     }
 
     protected override async ValueTask RunCommandAsync(IConsole console)

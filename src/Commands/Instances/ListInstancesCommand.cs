@@ -5,8 +5,6 @@ using System.Text;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
 using JetBrains.Annotations;
-using Middlewares;
-using Middlewares.Implementations;
 using Services;
 using Sessions;
 
@@ -19,13 +17,6 @@ public class ListInstancesCommand : BaseSessionCommand
     public bool Brief { get; init; }
 
     public ListInstancesCommand(ISessionManager sessions, IRemoteRegistry remotes) : base(sessions) => this.remotes = remotes;
-
-    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
-    {
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
-        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
-        middlewares.UseMiddleware<UserUnauthorizedHandler>();
-    }
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
