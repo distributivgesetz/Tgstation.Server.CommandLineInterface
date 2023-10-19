@@ -29,8 +29,14 @@ public sealed class MiddlewarePipeline : IMiddlewarePipeline
 
     public MiddlewarePipeline(IServiceProvider provider) => this.provider = provider;
 
-    public void UseMiddleware<T>() where T : ICommandMiddleware =>
+    public void UseMiddleware<T>() where T : ICommandMiddleware
+    {
+        if (this.middlewaresInUse.Any(m => m is T))
+        {
+            throw new ArgumentException($"Middleware {typeof(T).FullName} exists in container already");
+        }
         this.middlewaresInUse.Add((ICommandMiddleware)ActivatorUtilities.CreateInstance(this.provider, typeof(T)));
+    }
 
     public ValueTask RunAsync(IConsole console, Func<IConsole, ValueTask> commandMain)
     {
