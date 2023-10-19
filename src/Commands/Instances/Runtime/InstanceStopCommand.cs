@@ -1,38 +1,34 @@
-namespace Tgstation.Server.CommandLineInterface.Commands.InstanceManagement;
+﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
 
+using Api.Models.Request;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("list-instances"), UsedImplicitly]
-public class ListInstancesCommand : BaseCommand
+[Command("instance stop")]
+public class InstanceStopCommand : BaseCommand
 {
     private readonly ISessionManager sessions;
 
-    public ListInstancesCommand(ISessionManager sessions) => this.sessions = sessions;
+    [CommandParameter(0)]
+    public required long Id { get; init; }
+
+    public InstanceStopCommand(ISessionManager sessions) => this.sessions = sessions;
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
-        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
         middlewares.UseMiddleware<UserUnauthorizedHandler>();
+        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
     }
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
         var client = await this.sessions.ResumeSessionOrReprompt(console);
-
         var token = console.RegisterCancellationHandler();
-
-        // first fetch to get page count
-        var instances = await client.Instances.List(null, token);
-
-        foreach (var instance in instances)
-        {
-            await console.Output.WriteLineAsync(instance.Name);
-        }
+        var updateRequest = new InstanceUpdateRequest {Online = false, Id = this.Id};
+        await client.Instances.Update(updateRequest, token);
     }
 }

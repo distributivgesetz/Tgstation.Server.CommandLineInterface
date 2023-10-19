@@ -70,6 +70,8 @@ public class SessionManager : ISessionManager
             return client;
         }
 
+        this.DropSession(this.remotes.GetCurrentRemote().Name);
+
         return await this.LoginToSession(console, cancellationToken: token);
     }
 

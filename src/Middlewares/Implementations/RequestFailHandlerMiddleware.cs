@@ -1,22 +1,26 @@
 namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 
-using System.Net;
+using System.Net.Sockets;
+using Client;
 using CliFx.Exceptions;
 
 public class RequestFailHandlerMiddleware : ICommandMiddleware
 {
-    private const string ServerCannotBeContacted =
-        "Could not contact the TGS server. Make sure you are connected to the internet.";
-
     public async ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep)
     {
         try
         {
             await nextStep();
         }
-        catch (WebException)
+        catch (ApiException e)
         {
-            throw new CommandException(ServerCannotBeContacted);
+            throw new CommandException($"API returned an error: {e.ErrorCode.ToString()}");
+        }
+        catch (HttpRequestException e) when (e.InnerException?
+                                                 .GetType().IsSubclassOf(typeof(SocketException))
+                                             ?? false)
+        {
+            throw new CommandException($"Request to API failed: {e.InnerException.Message}");
         }
     }
 }

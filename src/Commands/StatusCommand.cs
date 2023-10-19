@@ -21,8 +21,11 @@ public class StatusCommand : BaseCommand
         this.remotes = remotes;
     }
 
-    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
+    {
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+        middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
+    }
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
@@ -34,7 +37,7 @@ public class StatusCommand : BaseCommand
 
         var statusReadout = new StringBuilder();
 
-        statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Status of TGS server at {currentRemote.Host}:\n");
+        statusReadout.AppendLine(CultureInfo.InvariantCulture, $"\nStatus of TGS server at {currentRemote.Host}:\n");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Server version: {res.Version} - " +
             $"API version: {res.ApiVersion} - " +
@@ -56,10 +59,10 @@ public class StatusCommand : BaseCommand
                 "None"
             )}");
 
-        statusReadout.Append(CultureInfo.InvariantCulture,
-            $"User limit: {res.UserLimit} User group limit: {res.UserGroupLimit} " +
+        statusReadout.AppendLine(CultureInfo.InvariantCulture,
+            $"User limit: {res.UserLimit} - User group limit: {res.UserGroupLimit} - " +
             $"Minimum password length: {res.MinimumPasswordLength}");
 
-        await console.Output.WriteLineAsync(statusReadout);
+        await console.Output.WriteAsync(statusReadout);
     }
 }
