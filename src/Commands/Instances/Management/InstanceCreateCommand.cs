@@ -6,19 +6,20 @@ using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
+using Sessions;
 
 [Command("instance create")]
-public class InstanceCreateCommand : BaseCommand
+public class InstanceCreateCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
-
     [CommandParameter(0)]
     public required string Name { get; init; }
 
     [CommandParameter(1)]
     public required string Path { get; init; }
 
-    public InstanceCreateCommand(ISessionManager sessions) => this.sessions = sessions;
+    public InstanceCreateCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {
@@ -29,7 +30,7 @@ public class InstanceCreateCommand : BaseCommand
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var client = await this.sessions.ResumeSessionOrReprompt(console);
+        var client = await this.Sessions.ResumeSessionOrReprompt(console);
         var request = new InstanceCreateRequest
         {
             Name = this.Name,

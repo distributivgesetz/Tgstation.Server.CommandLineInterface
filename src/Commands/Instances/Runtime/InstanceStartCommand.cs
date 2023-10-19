@@ -5,11 +5,16 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
+using Models;
 using Services;
+using Sessions;
 
 [Command("instance start")]
-public class InstanceStartCommand : BaseInstanceCommand
+public class InstanceStartCommand : BaseSessionCommand
 {
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    public required InstanceSelector Instance { get; init; }
+
     public InstanceStartCommand(ISessionManager sessions) : base(sessions)
     {
     }

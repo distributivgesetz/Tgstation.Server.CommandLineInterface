@@ -5,17 +5,19 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
+using Models;
 using Services;
+using Sessions;
 
 [Command("instance stop")]
-public class InstanceStopCommand : BaseCommand
+public class InstanceStopCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
-
-    [CommandParameter(0)]
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required long Id { get; init; }
 
-    public InstanceStopCommand(ISessionManager sessions) => this.sessions = sessions;
+    public InstanceStopCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {
@@ -26,7 +28,7 @@ public class InstanceStopCommand : BaseCommand
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var client = await this.sessions.ResumeSessionOrReprompt(console);
+        var client = await this.Sessions.ResumeSessionOrReprompt(console);
         var token = console.RegisterCancellationHandler();
         var updateRequest = new InstanceUpdateRequest {Online = false, Id = this.Id};
         await client.Instances.Update(updateRequest, token);

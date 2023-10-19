@@ -4,11 +4,15 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
+using Models;
 using Services;
+using Sessions;
 
 [Command("instance delete")]
-public class InstanceDeleteCommand : BaseInstanceCommand
+public class InstanceDeleteCommand : BaseSessionCommand
 {
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    public required InstanceSelector Instance { get; init; }
 
     public InstanceDeleteCommand(ISessionManager sessions) : base(sessions)
     {
