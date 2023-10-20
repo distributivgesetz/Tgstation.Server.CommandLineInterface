@@ -6,13 +6,13 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo configure")]
+[Command("instance repo")]
 public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }
 
-    [CommandOption('b')]
+    [CommandOption("ref")]
     public string? Reference { get; init; }
 
     [CommandOption("committer-name")]
