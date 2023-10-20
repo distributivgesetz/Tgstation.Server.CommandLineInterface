@@ -7,6 +7,7 @@ using CliFx;
 using Microsoft.Extensions.DependencyInjection;
 using Tgstation.Server.Client;
 using Tgstation.Server.CommandLineInterface.Middlewares;
+using Tgstation.Server.CommandLineInterface.Models;
 using Tgstation.Server.CommandLineInterface.Services;
 
 var sw = Stopwatch.StartNew();
@@ -43,6 +44,10 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
     services.AddSingleton<ISessionManager, SessionManager>();
     services.AddSingleton<ITgsClientManager, TgsClientManager>();
     services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
+
+    // Register converters here
+
+    services.AddSingleton<InstanceSelectorConverter>();
 
     // Handle commands
 
