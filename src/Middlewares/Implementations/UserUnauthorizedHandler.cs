@@ -14,7 +14,7 @@ public class UserUnauthorizedHandler : ICommandMiddleware
         }
         catch (UnauthorizedException e)
         {
-            throw new CommandException("Invalid server credentials.", innerException: e);
+            throw new CommandException("Invalid username or password.", innerException: e);
         }
         catch (BadLoginException e)
         {
