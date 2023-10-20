@@ -23,6 +23,7 @@ public sealed class RepoInfoCommand : BaseInstanceClientCommand
 
         var output = new StringBuilder();
 
+        // TODO: stop being lazy and reformat this
         output.AppendLine(info.RemoteRepositoryName);
         output.AppendLine(info.RemoteRepositoryOwner);
         output.AppendLine(info.Origin!.ToString());

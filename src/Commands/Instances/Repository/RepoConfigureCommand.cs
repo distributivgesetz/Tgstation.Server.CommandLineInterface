@@ -6,7 +6,7 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo")]
+[Command("instance repo config")]
 public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
