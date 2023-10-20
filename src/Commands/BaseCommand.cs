@@ -6,9 +6,9 @@ using Middlewares;
 
 public abstract class BaseCommand : ICommand
 {
-    private IMiddlewarePipelineRunner? pipeline;
+    private IMiddlewarePipelineRunner pipeline = null!;
 
-    public ValueTask ExecuteAsync(IConsole console) => this.pipeline!.RunAsync(console, console1 => this.RunCommandAsync(console1));
+    public ValueTask ExecuteAsync(IConsole console) => this.pipeline.RunAsync(console, this.RunCommandAsync);
 
     public void UseMiddlewares(IMiddlewarePipeline insertedPipeline)
     {
