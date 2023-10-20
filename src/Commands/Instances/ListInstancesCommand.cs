@@ -4,11 +4,10 @@ using System.Globalization;
 using System.Text;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Services;
 using Sessions;
 
-[Command("list-instances"), UsedImplicitly]
+[Command("list-instances")]
 public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;

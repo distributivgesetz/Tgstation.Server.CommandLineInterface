@@ -2,12 +2,11 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("login"), UsedImplicitly]
+[Command("login")]
 public sealed class LoginCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;

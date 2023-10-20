@@ -3,18 +3,16 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Remotes;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Services;
 
 [Command("remote",
-     Description = "Displays the currently used remote. If a name param is given, tries to set the current remote."),
- UsedImplicitly]
+     Description = "Displays the currently used remote. If a name param is given, tries to set the current remote.")]
 public sealed class RemoteCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
 
     [CommandParameter(0, Description = "Sets the currently used remote.", IsRequired = false)]
-    public string? Name { get; [UsedImplicitly] init; }
+    public string? Name { get; init; }
 
     public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
 

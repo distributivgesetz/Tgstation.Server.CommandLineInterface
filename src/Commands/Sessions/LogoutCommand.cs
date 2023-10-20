@@ -2,12 +2,11 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("logout"), UsedImplicitly]
+[Command("logout")]
 public sealed class LogoutCommand : BaseCommand
 {
     private readonly ISessionManager sessions;

@@ -5,20 +5,19 @@ using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Services;
 
-[Command("remote add", Description = "Adds a remote."), UsedImplicitly]
+[Command("remote add", Description = "Adds a remote.")]
 public sealed class RemoteAddCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
     private readonly ITgsClientManager tgsManager;
 
     [CommandParameter(0, Description = "The name to use for this remote.")]
-    public required string Name { get; [UsedImplicitly] init; }
+    public required string Name { get; init; }
 
     [CommandParameter(1, Description = "The URL of the server's API.")]
-    public required string Url { get; [UsedImplicitly] init; }
+    public required string Url { get; init; }
 
     public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
     {

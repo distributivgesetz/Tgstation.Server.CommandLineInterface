@@ -4,12 +4,11 @@ using System.Globalization;
 using System.Text;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("status"), UsedImplicitly]
+[Command("status")]
 public sealed class StatusCommand : BaseCommand
 {
     private readonly ITgsClientManager manager;

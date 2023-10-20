@@ -3,10 +3,9 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Remotes;
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using JetBrains.Annotations;
 using Services;
 
-[Command("remote list", Description = "List available remotes."), UsedImplicitly]
+[Command("remote list", Description = "List available remotes.")]
 public sealed class RemoteListCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
