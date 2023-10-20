@@ -6,13 +6,19 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo update")]
-public sealed class RepoUpdateCommand : BaseInstanceClientCommand
+[Command("instance repo access")]
+public class RepoCredentialsCommand : BaseInstanceClientCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    [CommandParameter(0)]
     public required InstanceSelector Instance { get; init; }
 
-    public RepoUpdateCommand(ISessionManager sessions) : base(sessions)
+    [CommandParameter(1)]
+    public required string AccessName { get; init; }
+
+    [CommandParameter(2)]
+    public required string AccessPhrase { get; init; }
+
+    public RepoCredentialsCommand(ISessionManager sessions) : base(sessions)
     {
     }
 
@@ -21,7 +27,7 @@ public sealed class RepoUpdateCommand : BaseInstanceClientCommand
         var instanceClient = await this.RequestInstanceClient(this.Instance, console);
         await instanceClient.Repository.Update(new RepositoryUpdateRequest
         {
-
+            AccessUser = this.AccessName, AccessToken = this.AccessPhrase
         }, console.RegisterCancellationHandler());
     }
 }
