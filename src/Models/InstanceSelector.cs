@@ -11,7 +11,7 @@ public sealed record InstanceSelector(long Id) : ApiConverter<Instance>
     public static implicit operator long(InstanceSelector inst) => inst.Id;
 }
 
-public class InstanceSelectorConverter : BindingConverter<InstanceSelector>
+public sealed class InstanceSelectorConverter : BindingConverter<InstanceSelector>
 {
     public override InstanceSelector Convert(string? rawValue) =>
         !string.IsNullOrWhiteSpace(rawValue) ?

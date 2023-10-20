@@ -11,7 +11,7 @@ using Sessions;
 public sealed class InstanceStopCommand : BaseSessionCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
-    public required long Id { get; init; }
+    public required InstanceSelector Id { get; init; }
 
     public InstanceStopCommand(ISessionManager sessions) : base(sessions)
     {

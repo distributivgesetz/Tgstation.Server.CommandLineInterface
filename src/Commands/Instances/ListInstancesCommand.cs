@@ -7,7 +7,7 @@ using CliFx.Infrastructure;
 using Services;
 using Sessions;
 
-[Command("list-instances")]
+[Command("instance list")]
 public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;
@@ -27,14 +27,16 @@ public sealed class ListInstancesCommand : BaseSessionCommand
 
         var output = new StringBuilder();
 
-        output.AppendLine(CultureInfo.InvariantCulture, $"All instances for {this.remotes.GetCurrentRemote().Host}:\n");
+        output.Append(CultureInfo.InvariantCulture, $"All instances for {this.remotes.GetCurrentRemote().Host} " +
+                                                        $"(visible to current user):\n");
 
         foreach (var instance in instances)
         {
+            output.AppendLine();
             output.AppendLine(CultureInfo.InvariantCulture,
                 $"Name: {instance.Name} ({instance.Id}) {(!instance.Accessible ? " [no access]" : "")}");
 
-            output.AppendLine(CultureInfo.InvariantCulture, $"\tCurrently Online: {instance.Online}");
+            output.AppendLine(CultureInfo.InvariantCulture, $"  Currently Online: {instance.Online}");
 
             if (this.Brief)
             {
@@ -51,6 +53,6 @@ public sealed class ListInstancesCommand : BaseSessionCommand
             output.AppendLine(CultureInfo.InvariantCulture, $"  Is Currently Moving On Disk: {instance.MoveJob != null}");
         }
 
-        await console.Output.WriteLineAsync(output, token);
+        await console.Output.WriteAsync(output, token);
     }
 }
