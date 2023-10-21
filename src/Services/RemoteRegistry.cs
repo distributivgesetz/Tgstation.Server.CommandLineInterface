@@ -12,6 +12,7 @@ public interface IRemoteRegistry
     TgsRemote GetCurrentRemote();
     void SetCurrentRemote(string name);
     void SaveRemotes();
+    void RemoveRemote(string name);
 }
 
 public sealed class RemoteRegistry : IRemoteRegistry
@@ -40,7 +41,39 @@ public sealed class RemoteRegistry : IRemoteRegistry
 
     public TgsRemote GetCurrentRemote() => this.CurrentRemote!.Value;
 
-    public void SetCurrentRemote(string name) => this.remotes.Current = name;
+    public void SetCurrentRemote(string? name)
+    {
+        if (name != null)
+        {
+            if (this.ContainsRemote(name))
+            {
+                this.remotes.Current = name;
+            }
+            else
+            {
+                throw new ArgumentException($"Remote {name} not recognized", nameof(name));
+            }
+        }
+        else
+        {
+            this.remotes.Current = null;
+        }
+    }
 
     public void SaveRemotes() => this.preferences.WriteData(this.remotes);
+
+    public void RemoveRemote(string name)
+    {
+        if (!this.ContainsRemote(name))
+        {
+            throw new ArgumentException($"Remote {name} not recognized");
+        }
+
+        if (this.remotes.Current == name)
+        {
+            this.SetCurrentRemote(null);
+        }
+
+        this.remotes.Remotes.Remove(name);
+    }
 }
