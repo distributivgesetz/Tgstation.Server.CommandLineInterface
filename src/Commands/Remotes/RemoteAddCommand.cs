@@ -1,6 +1,5 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Remotes;
 
-using Client;
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Exceptions;
@@ -18,6 +17,8 @@ public sealed class RemoteAddCommand : ICommand
 
     [CommandParameter(1, Description = "The URL of the server's API.")]
     public required string Url { get; init; }
+
+    [CommandOption("switch", 's')] public bool SwitchBranch { get; init; }
 
     public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
     {
@@ -53,8 +54,15 @@ public sealed class RemoteAddCommand : ICommand
         // we're good
 
         this.remotes.AddRemote(this.Name, new Uri(this.Url));
+
+        if (this.SwitchBranch)
+        {
+            this.remotes.SetCurrentRemote(this.Name);
+        }
+
         this.remotes.SaveRemotes();
 
-        await console.Output.WriteLineAsync("New remote registered successfully.");
+        await console.Output.WriteLineAsync("New remote registered successfully." +
+                                            (this.SwitchBranch ? $" Switched to {this.Name}." : ""));
     }
 }
