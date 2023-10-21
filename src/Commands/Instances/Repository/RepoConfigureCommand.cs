@@ -12,9 +12,6 @@ public sealed class RepoConfigureCommand : BaseInstanceClientCommand
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }
 
-    [CommandOption("ref")]
-    public string? Reference { get; init; }
-
     [CommandOption("committer-name")]
     public string? CommitterName { get; init; }
 
@@ -43,7 +40,6 @@ public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 
         await instanceClient.Repository.Update(new RepositoryUpdateRequest
         {
-            Reference = this.Reference,
             CommitterName = this.CommitterName,
             CommitterEmail = this.CommitterEmail,
             UpdateSubmodules = this.UpdateSubmodules,

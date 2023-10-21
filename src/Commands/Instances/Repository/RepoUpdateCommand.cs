@@ -12,6 +12,9 @@ public class RepoUpdateCommand : BaseInstanceClientCommand
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }
 
+    [CommandParameter(1, IsRequired = false)]
+    public string? Reference { get; init; }
+
     public RepoUpdateCommand(ISessionManager sessions) : base(sessions)
     {
     }
@@ -19,7 +22,7 @@ public class RepoUpdateCommand : BaseInstanceClientCommand
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
         var client = await this.RequestInstanceClient(this.Instance, console);
-        await client.Repository.Update(new RepositoryUpdateRequest { UpdateFromOrigin = true },
+        await client.Repository.Update(new RepositoryUpdateRequest { UpdateFromOrigin = true, Reference = this.Reference },
             console.RegisterCancellationHandler());
     }
 }
