@@ -14,15 +14,25 @@ public sealed class RemoteCommand : BaseCommand
     [CommandParameter(0, Description = "The name of the remote to set.", IsRequired = false)]
     public string? Name { get; init; }
 
+    [CommandOption("unset", 'u', Description = "Unsets the current remote.")]
+    public bool Unset { get; init; }
+
     public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
 
     protected override ValueTask RunCommandAsync(IConsole console)
     {
+        if (this.Unset)
+        {
+            this.remotes.SetCurrentRemote(null);
+            this.remotes.SaveRemotes();
+            return default;
+        }
+
         if (this.Name == null)
         {
             console.Output.WriteLine(this.remotes.HasCurrentRemote() ?
                 this.remotes.GetCurrentRemote().Name :
-                "No remote currently in use.");
+                "No remote currently set.");
         }
         else
         {

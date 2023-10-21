@@ -10,7 +10,7 @@ public interface IRemoteRegistry
     TgsRemote GetRemote(string name);
     bool HasCurrentRemote();
     TgsRemote GetCurrentRemote();
-    void SetCurrentRemote(string name);
+    void SetCurrentRemote(string? name);
     void SaveRemotes();
     void RemoveRemote(string name);
 }
