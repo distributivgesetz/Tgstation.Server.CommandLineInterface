@@ -3,6 +3,7 @@ namespace Tgstation.Server.CommandLineInterface.Commands;
 using System.Globalization;
 using System.Text;
 using CliFx.Attributes;
+using CliFx.Exceptions;
 using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
@@ -14,21 +15,28 @@ public sealed class StatusCommand : BaseCommand
     private readonly ITgsClientManager manager;
     private readonly IRemoteRegistry remotes;
 
+    [CommandParameter(0, IsRequired = false,
+        Description = "The remote to poll the status of. Defaults to current remote.")]
+    public string? Remote { get; init; }
+
     public StatusCommand(IRemoteRegistry remotes, ITgsClientManager manager)
     {
         this.manager = manager;
         this.remotes = remotes;
     }
 
-    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
-    {
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+    protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
         middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
-    }
 
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
-        var currentRemote = this.remotes.GetCurrentRemote();
+        var currentRemote = this.Remote != null ?
+            this.remotes.ContainsRemote(this.Remote) ?
+                this.remotes.GetRemote(this.Remote) :
+                throw new CommandException($"Remote {this.Remote} is not recognized") :
+            this.remotes.HasCurrentRemote() ?
+                this.remotes.GetCurrentRemote() :
+                throw new CommandException(EnsureCurrentSessionMiddleware.RemoteUnsetErrorMessage);
 
         await console.Output.WriteLineAsync("Fetching server status...");
 
@@ -36,7 +44,7 @@ public sealed class StatusCommand : BaseCommand
 
         var statusReadout = new StringBuilder();
 
-        statusReadout.AppendLine(CultureInfo.InvariantCulture, $"\nStatus of TGS server at {currentRemote.Host}:\n");
+        statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Status of TGS server at {currentRemote.Host}:\n");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Server version: {res.Version} - " +
                                                                $"API version: {res.ApiVersion} - " +

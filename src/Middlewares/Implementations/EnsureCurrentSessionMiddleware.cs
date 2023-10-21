@@ -5,8 +5,8 @@ using Services;
 
 public class EnsureCurrentSessionMiddleware : ICommandMiddleware
 {
-    private const string RemoteUnsetErrorMessage =
-        "No remote has been registered, check \"tgs remote add --help\" for more details.";
+    public const string RemoteUnsetErrorMessage =
+        "No remote has been set, check \"tgs remote add --help\" for more details.";
 
     private readonly IRemoteRegistry remotes;
 
