@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
 
 using Api.Models.Request;
 using CliFx.Attributes;
@@ -7,10 +7,10 @@ using Models;
 using Services;
 using Sessions;
 
-[Command("instance start")]
+[Command("instance start", Description = "Starts an instance.")]
 public sealed class InstanceStartCommand : BaseSessionCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
     public InstanceStartCommand(ISessionManager sessions) : base(sessions)
@@ -21,7 +21,7 @@ public sealed class InstanceStartCommand : BaseSessionCommand
     {
         var client = await this.Sessions.ResumeSessionOrReprompt(console);
         var token = console.RegisterCancellationHandler();
-        var updateRequest = new InstanceUpdateRequest {Online = true, Id = this.Instance};
+        var updateRequest = new InstanceUpdateRequest { Online = true, Id = this.Instance };
         await client.Instances.Update(updateRequest, token);
     }
 }

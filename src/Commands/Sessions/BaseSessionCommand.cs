@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
+namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
 
 using Middlewares;
 using Middlewares.Implementations;

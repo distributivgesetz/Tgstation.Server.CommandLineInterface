@@ -5,7 +5,7 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using Services;
 
-[Command("remote list", Description = "List available remotes.")]
+[Command("remote list", Description = "Lists available remotes.")]
 public sealed class RemoteListCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;

@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Models;
+namespace Tgstation.Server.CommandLineInterface.Models;
 
 using System.Globalization;
 using Api.Models;
@@ -7,7 +7,7 @@ using CliFx.Extensibility;
 
 public sealed record InstanceSelector(long Id) : ApiConverter<Instance>
 {
-    protected override Instance ToApi() => new InstanceResponse {Id = this.Id};
+    protected override Instance ToApi() => new InstanceResponse { Id = this.Id };
     public static implicit operator long(InstanceSelector inst) => inst.Id;
 }
 
@@ -15,6 +15,6 @@ public sealed class InstanceSelectorConverter : BindingConverter<InstanceSelecto
 {
     public override InstanceSelector Convert(string? rawValue) =>
         !string.IsNullOrWhiteSpace(rawValue) ?
-            new InstanceSelector(long.Parse(rawValue, CultureInfo.InvariantCulture)):
+            new InstanceSelector(long.Parse(rawValue, CultureInfo.InvariantCulture)) :
             new InstanceSelector(0);
 }

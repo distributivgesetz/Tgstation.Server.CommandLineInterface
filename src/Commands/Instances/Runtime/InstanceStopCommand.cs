@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
 
 using Api.Models.Request;
 using CliFx.Attributes;
@@ -7,11 +7,11 @@ using Models;
 using Services;
 using Sessions;
 
-[Command("instance stop")]
+[Command("instance stop", Description = "Stops an instance.")]
 public sealed class InstanceStopCommand : BaseSessionCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
-    public required InstanceSelector Id { get; init; }
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
+    public required InstanceSelector Instance { get; init; }
 
     public InstanceStopCommand(ISessionManager sessions) : base(sessions)
     {
@@ -21,7 +21,7 @@ public sealed class InstanceStopCommand : BaseSessionCommand
     {
         var client = await this.Sessions.ResumeSessionOrReprompt(console);
         var token = console.RegisterCancellationHandler();
-        var updateRequest = new InstanceUpdateRequest {Online = false, Id = this.Id};
+        var updateRequest = new InstanceUpdateRequest { Online = false, Id = this.Instance };
         await client.Instances.Update(updateRequest, token);
     }
 }

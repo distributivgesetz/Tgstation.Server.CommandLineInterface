@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
 
 using System.Text;
 using CliFx.Attributes;
@@ -6,10 +6,10 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo")]
+[Command("instance repo", Description = "Displays information about an instance's repository and its settings.")]
 public sealed class RepoInfoCommand : BaseInstanceClientCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
     public RepoInfoCommand(ISessionManager sessions) : base(sessions)

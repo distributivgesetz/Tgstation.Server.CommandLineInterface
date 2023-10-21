@@ -7,7 +7,7 @@ using CliFx.Infrastructure;
 using Services;
 using Sessions;
 
-[Command("instance list")]
+[Command("instance list", Description = "Lists all instances that are visible to the current user.")]
 public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;

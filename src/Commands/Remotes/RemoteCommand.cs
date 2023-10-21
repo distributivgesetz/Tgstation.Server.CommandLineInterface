@@ -11,7 +11,7 @@ public sealed class RemoteCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
 
-    [CommandParameter(0, Description = "Sets the currently used remote.", IsRequired = false)]
+    [CommandParameter(0, Description = "The name of the remote to set.", IsRequired = false)]
     public string? Name { get; init; }
 
     public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;

@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
 
 using Api.Models.Request;
 using CliFx.Attributes;
@@ -6,7 +6,7 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo access")]
+[Command("instance repo credentials")]
 public class RepoCredentialsCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0)]
@@ -27,7 +27,8 @@ public class RepoCredentialsCommand : BaseInstanceClientCommand
         var instanceClient = await this.RequestInstanceClient(this.Instance, console);
         await instanceClient.Repository.Update(new RepositoryUpdateRequest
         {
-            AccessUser = this.AccessName, AccessToken = this.AccessPhrase
+            AccessUser = this.AccessName,
+            AccessToken = this.AccessPhrase
         }, console.RegisterCancellationHandler());
     }
 }

@@ -1,10 +1,10 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Persistence;
+namespace Tgstation.Server.CommandLineInterface.Persistence;
 
 using Newtonsoft.Json;
 using Services;
 
 [DataLocation("instances")]
-public record struct InstancesCache
+public readonly record struct InstancesCache
 {
     public Dictionary<string, RemoteKeyToInstance> Cache { get; }
 

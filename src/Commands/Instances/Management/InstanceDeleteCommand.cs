@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Management;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Management;
 
 using CliFx.Attributes;
 using CliFx.Infrastructure;
@@ -6,13 +6,13 @@ using Models;
 using Services;
 using Sessions;
 
-[Command("instance delete")]
-public sealed class InstanceDeleteCommand : BaseSessionCommand
+[Command("instance detach", Description = "Detaches an instance.")]
+public sealed class InstanceDetachCommand : BaseSessionCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
-    public InstanceDeleteCommand(ISessionManager sessions) : base(sessions)
+    public InstanceDetachCommand(ISessionManager sessions) : base(sessions)
     {
     }
 

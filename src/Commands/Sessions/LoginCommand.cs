@@ -6,7 +6,7 @@ using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("login")]
+[Command("login", Description = "Logs in with an account.")]
 public sealed class LoginCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;

@@ -6,13 +6,13 @@ using CliFx.Infrastructure;
 using Models;
 using Services;
 
-[Command("instance repo update")]
+[Command("instance repo update", Description = "Runs a pull from origin on an instance.")]
 public class RepoUpdateCommand : BaseInstanceClientCommand
 {
-    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
+    [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
-    [CommandParameter(1, IsRequired = false)]
+    [CommandOption("ref", 'r', Description = "The reference the repo should pull from.")]
     public string? Reference { get; init; }
 
     public RepoUpdateCommand(ISessionManager sessions) : base(sessions)

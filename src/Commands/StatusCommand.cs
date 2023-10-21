@@ -8,7 +8,7 @@ using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("status")]
+[Command("status", Description = "Gets the status of a remote.")]
 public sealed class StatusCommand : BaseCommand
 {
     private readonly ITgsClientManager manager;

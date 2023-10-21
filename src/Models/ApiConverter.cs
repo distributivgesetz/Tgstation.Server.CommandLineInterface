@@ -1,4 +1,4 @@
-﻿namespace Tgstation.Server.CommandLineInterface.Models;
+namespace Tgstation.Server.CommandLineInterface.Models;
 
 public abstract record ApiConverter<T>
 {

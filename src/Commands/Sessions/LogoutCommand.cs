@@ -6,7 +6,7 @@ using Middlewares;
 using Middlewares.Implementations;
 using Services;
 
-[Command("logout")]
+[Command("logout", Description = "Drops the current session.")]
 public sealed class LogoutCommand : BaseCommand
 {
     private readonly ISessionManager sessions;
