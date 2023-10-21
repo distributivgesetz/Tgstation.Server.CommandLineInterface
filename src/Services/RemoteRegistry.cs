@@ -23,13 +23,13 @@ public sealed class RemoteRegistry : IRemoteRegistry
     private TgsRemote? CurrentRemote =>
         this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
 
-    public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
-
     public RemoteRegistry(IPersistenceManager prefs)
     {
         this.preferences = prefs;
         this.remotes = this.preferences.ReadData<RemotesPreferences>();
     }
+
+    public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
 
     public void AddRemote(string name, Uri uri) => this.remotes.Remotes.Add(name, new TgsRemote(name, uri));
 

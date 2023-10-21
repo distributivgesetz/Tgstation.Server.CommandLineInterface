@@ -24,8 +24,8 @@ public interface IMiddlewareContext
 
 public sealed class MiddlewarePipeline : IMiddlewarePipeline
 {
-    private readonly IServiceProvider provider;
     private readonly List<ICommandMiddleware> middlewaresInUse = new();
+    private readonly IServiceProvider provider;
 
     public MiddlewarePipeline(IServiceProvider provider) => this.provider = provider;
 
@@ -35,6 +35,7 @@ public sealed class MiddlewarePipeline : IMiddlewarePipeline
         {
             throw new ArgumentException($"Middleware {typeof(T).FullName} exists in container already");
         }
+
         this.middlewaresInUse.Add((ICommandMiddleware)ActivatorUtilities.CreateInstance(this.provider, typeof(T)));
     }
 

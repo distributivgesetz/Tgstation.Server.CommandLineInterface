@@ -22,11 +22,7 @@ public sealed class InstanceCreateCommand : BaseSessionCommand
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
         var client = await this.Sessions.ResumeSessionOrReprompt(console);
-        var request = new InstanceCreateRequest
-        {
-            Name = this.Name,
-            Path = this.Path
-        };
+        var request = new InstanceCreateRequest { Name = this.Name, Path = this.Path };
         await client.Instances.CreateOrAttach(request, console.RegisterCancellationHandler());
     }
 }

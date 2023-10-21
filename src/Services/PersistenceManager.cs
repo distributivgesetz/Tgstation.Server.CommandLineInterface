@@ -14,6 +14,28 @@ public sealed class PersistenceManager : IPersistenceManager
 {
     private readonly Dictionary<Type, string> typeToPrefsFilename = new();
 
+    public T? ReadData<T>() where T : new()
+    {
+        var filePath = this.GetFileName(typeof(T));
+
+        return !File.Exists(filePath) ? new T() : JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
+    }
+
+    public void WriteData<T>(T prefs) where T : new()
+    {
+        var serialized = JsonConvert.SerializeObject(prefs);
+        var filePath = this.GetFileName(typeof(T));
+        File.WriteAllText(filePath, serialized);
+    }
+
+    public ValueTask<T?> ReadDataAsync<T>() where T : new() => ValueTask.FromResult(this.ReadData<T>());
+
+    public ValueTask WriteDataAsync<T>(T prefs) where T : new()
+    {
+        this.WriteData(prefs);
+        return ValueTask.CompletedTask;
+    }
+
     private string GetFileName(Type t)
     {
         if (this.typeToPrefsFilename.TryGetValue(t, out var name))
@@ -38,36 +60,11 @@ public sealed class PersistenceManager : IPersistenceManager
 
         return this.typeToPrefsFilename[t];
     }
-
-    public T? ReadData<T>() where T : new()
-    {
-        var filePath = this.GetFileName(typeof(T));
-
-        return !File.Exists(filePath)
-            ? new T()
-            : JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
-    }
-
-    public void WriteData<T>(T prefs) where T : new()
-    {
-        var serialized = JsonConvert.SerializeObject(prefs);
-        var filePath = this.GetFileName(typeof(T));
-        File.WriteAllText(filePath, serialized);
-    }
-
-    public ValueTask<T?> ReadDataAsync<T>() where T : new() => ValueTask.FromResult(this.ReadData<T>());
-
-    public ValueTask WriteDataAsync<T>(T prefs) where T : new()
-    {
-        this.WriteData(prefs);
-        return ValueTask.CompletedTask;
-    }
 }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public sealed class DataLocationAttribute : Attribute
 {
     public string Name { get; }
-
     public DataLocationAttribute(string name) => this.Name = name;
 }

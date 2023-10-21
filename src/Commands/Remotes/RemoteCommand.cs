@@ -6,7 +6,7 @@ using CliFx.Infrastructure;
 using Services;
 
 [Command("remote",
-     Description = "Displays the currently used remote. If a name param is given, tries to set the current remote.")]
+    Description = "Displays the currently used remote. If a name param is given, tries to set the current remote.")]
 public sealed class RemoteCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
@@ -20,9 +20,9 @@ public sealed class RemoteCommand : BaseCommand
     {
         if (this.Name == null)
         {
-            console.Output.WriteLine(this.remotes.HasCurrentRemote()
-                ? this.remotes.GetCurrentRemote().Name
-                : "No remote currently in use.");
+            console.Output.WriteLine(this.remotes.HasCurrentRemote() ?
+                this.remotes.GetCurrentRemote().Name :
+                "No remote currently in use.");
         }
         else
         {

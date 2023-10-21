@@ -12,9 +12,11 @@ public sealed class RepoCloneCommand : BaseInstanceClientCommand
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The target instance.")]
     public required InstanceSelector Instance { get; init; }
 
-    [CommandParameter(1, Description = "The repository URL to clone from.")] public required Uri RepositoryUrl { get; init; }
+    [CommandParameter(1, Description = "The repository URL to clone from.")]
+    public required Uri RepositoryUrl { get; init; }
 
-    [CommandOption("ref", 'r', Description = "The reference (branch) to clone.")] public string? Ref { get; init; }
+    [CommandOption("ref", 'r', Description = "The reference (branch) to clone.")]
+    public string? Ref { get; init; }
 
     public RepoCloneCommand(ISessionManager sessions) : base(sessions)
     {

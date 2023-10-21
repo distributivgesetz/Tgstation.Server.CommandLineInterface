@@ -18,5 +18,4 @@ public readonly record struct InstancesCache
 
 public readonly record struct RemoteKeyToInstance(string Key, Dictionary<string, InstanceCacheItem> Instances);
 
-
 public readonly record struct InstanceCacheItem(string Name, long Id);

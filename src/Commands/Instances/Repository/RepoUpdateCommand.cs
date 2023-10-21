@@ -22,7 +22,8 @@ public class RepoUpdateCommand : BaseInstanceClientCommand
     protected override async ValueTask RunCommandAsync(IConsole console)
     {
         var client = await this.RequestInstanceClient(this.Instance, console);
-        await client.Repository.Update(new RepositoryUpdateRequest { UpdateFromOrigin = true, Reference = this.Reference },
+        await client.Repository.Update(
+            new RepositoryUpdateRequest { UpdateFromOrigin = true, Reference = this.Reference },
             console.RegisterCancellationHandler());
     }
 }

@@ -38,14 +38,15 @@ public sealed class RepoConfigureCommand : BaseInstanceClientCommand
     {
         var instanceClient = await this.RequestInstanceClient(this.Instance, console);
 
-        await instanceClient.Repository.Update(new RepositoryUpdateRequest
-        {
-            CommitterName = this.CommitterName,
-            CommitterEmail = this.CommitterEmail,
-            UpdateSubmodules = this.UpdateSubmodules,
-            AutoUpdatesSynchronize = this.AutoUpdatesSynchronize,
-            PostTestMergeComment = this.PostTestMergeComments,
-            AutoUpdatesKeepTestMerges = this.KeepTestMerges
-        }, console.RegisterCancellationHandler());
+        await instanceClient.Repository.Update(
+            new RepositoryUpdateRequest
+            {
+                CommitterName = this.CommitterName,
+                CommitterEmail = this.CommitterEmail,
+                UpdateSubmodules = this.UpdateSubmodules,
+                AutoUpdatesSynchronize = this.AutoUpdatesSynchronize,
+                PostTestMergeComment = this.PostTestMergeComments,
+                AutoUpdatesKeepTestMerges = this.KeepTestMerges
+            }, console.RegisterCancellationHandler());
     }
 }

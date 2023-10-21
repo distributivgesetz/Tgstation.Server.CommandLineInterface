@@ -39,17 +39,17 @@ public sealed class StatusCommand : BaseCommand
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"\nStatus of TGS server at {currentRemote.Host}:\n");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Server version: {res.Version} - " +
-            $"API version: {res.ApiVersion} - " +
-            $"DMAPI version: {res.DMApiVersion}");
+                                                               $"API version: {res.ApiVersion} - " +
+                                                               $"DMAPI version: {res.DMApiVersion}");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Server update in progress: {res.UpdateInProgress}");
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Server OS: {(res.WindowsHost ? "Windows" : "Unix")}");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Instance limit: {res.InstanceLimit} " +
-            $"{(res.ValidInstancePaths != null ?
-                    $" Instance paths: {string.Join(';', res.ValidInstancePaths)}" :
-                    ""
-                )}");
+                                                               $"{(res.ValidInstancePaths != null ?
+                                                                       $" Instance paths: {string.Join(';', res.ValidInstancePaths)}" :
+                                                                       ""
+                                                                   )}");
 
         statusReadout.AppendLine(CultureInfo.InvariantCulture, $"Linked Swarm servers: {(res.SwarmServers != null ?
                 "\n" + string.Join('\n', res.SwarmServers.Select(swarm =>

@@ -11,7 +11,9 @@ public interface ISessionManager
     ValueTask<IServerClient> ResumeSessionOrReprompt(IConsole console, CancellationToken token = default);
     bool HasSession(string remoteKey);
 
-    ValueTask<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
+    ValueTask<IServerClient> LoginToSession(
+        IConsole console,
+        bool saveSession = true,
         CancellationToken cancellationToken = default);
 
     void DropSession(string key);
@@ -20,9 +22,9 @@ public interface ISessionManager
 
 public sealed class SessionManager : ISessionManager
 {
-    private readonly IRemoteRegistry remotes;
     private readonly ITgsClientManager clientFactory;
     private readonly IPersistenceManager prefs;
+    private readonly IRemoteRegistry remotes;
 
     private SessionPersistence Sessions { get; }
 
@@ -77,7 +79,9 @@ public sealed class SessionManager : ISessionManager
 
     public bool HasSession(string remoteKey) => this.Sessions.Sessions.ContainsKey(remoteKey);
 
-    public async ValueTask<IServerClient> LoginToSession(IConsole console, bool saveSession = true,
+    public async ValueTask<IServerClient> LoginToSession(
+        IConsole console,
+        bool saveSession = true,
         CancellationToken cancellationToken = default)
     {
         var currentRemote = this.remotes.GetCurrentRemote();
@@ -130,7 +134,7 @@ public sealed class SessionManager : ISessionManager
         ConsoleKey key;
         do
         {
-            var keyInfo = console.ReadKey(intercept: true);
+            var keyInfo = console.ReadKey(true);
             key = keyInfo.Key;
 
             if (key == ConsoleKey.Backspace && phrase.Length > 0)
@@ -154,7 +158,7 @@ public sealed class SessionManager : ISessionManager
 public class BadLoginException : Exception
 {
     public BadLoginException(string message, Exception? innerException = null) : base(message,
-        innerException: innerException)
+        innerException)
     {
     }
 }

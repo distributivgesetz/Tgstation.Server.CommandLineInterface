@@ -11,7 +11,8 @@ public sealed class RemoveRemoteCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
 
-    [CommandParameter(0, Description = "The remote to be unregistered.")] public required string Name { get; init; }
+    [CommandParameter(0, Description = "The remote to be unregistered.")]
+    public required string Name { get; init; }
 
     public RemoveRemoteCommand(IRemoteRegistry remotes) => this.remotes = remotes;
 
@@ -21,6 +22,7 @@ public sealed class RemoveRemoteCommand : ICommand
         {
             throw new CommandException($"Remote {this.Name} does not exist.");
         }
+
         this.remotes.RemoveRemote(this.Name);
         this.remotes.SaveRemotes();
         return default;

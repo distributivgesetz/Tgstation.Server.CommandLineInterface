@@ -9,8 +9,8 @@ using Services;
 [Command("logout", Description = "Drops the current session.")]
 public sealed class LogoutCommand : BaseCommand
 {
-    private readonly ISessionManager sessions;
     private readonly IRemoteRegistry remotes;
+    private readonly ISessionManager sessions;
 
     public LogoutCommand(ISessionManager sessions, IRemoteRegistry remotes)
     {

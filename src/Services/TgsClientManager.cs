@@ -7,10 +7,16 @@ public interface ITgsClientManager
 {
     Task<ServerInformationResponse> PingServer(Uri host);
 
-    Task<IServerClient> CreateSessionWithToken(Uri host, string token, DateTimeOffset expiry,
+    Task<IServerClient> CreateSessionWithToken(
+        Uri host,
+        string token,
+        DateTimeOffset expiry,
         CancellationToken cancellationToken = default);
 
-    Task<IServerClient> CreateSessionWithLogin(Uri host, string userName, string password,
+    Task<IServerClient> CreateSessionWithLogin(
+        Uri host,
+        string userName,
+        string password,
         CancellationToken cancellationToken = default);
 }
 
@@ -20,7 +26,10 @@ public sealed class TgsClientManager : ITgsClientManager
 
     public TgsClientManager(IServerClientFactory serverClientFactory) => this.serverClientFactory = serverClientFactory;
 
-    public async Task<IServerClient> CreateSessionWithToken(Uri host, string token, DateTimeOffset expiry,
+    public async Task<IServerClient> CreateSessionWithToken(
+        Uri host,
+        string token,
+        DateTimeOffset expiry,
         CancellationToken cancellationToken = default)
     {
         var client = this.serverClientFactory.CreateFromToken(host,
@@ -32,7 +41,10 @@ public sealed class TgsClientManager : ITgsClientManager
         return client;
     }
 
-    public async Task<IServerClient> CreateSessionWithLogin(Uri host, string userName, string password,
+    public async Task<IServerClient> CreateSessionWithLogin(
+        Uri host,
+        string userName,
+        string password,
         CancellationToken cancellationToken = default) =>
         await this.serverClientFactory.CreateFromLogin(host, userName, password, cancellationToken: cancellationToken);
 
