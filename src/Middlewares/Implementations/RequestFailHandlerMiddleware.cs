@@ -1,8 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Middlewares.Implementations;
 
-using System.Net.Sockets;
-using Client;
-using CliFx.Exceptions;
+using Commands;
 using Services;
 
 public class RequestFailHandlerMiddleware : ICommandMiddleware
@@ -13,19 +11,8 @@ public class RequestFailHandlerMiddleware : ICommandMiddleware
 
     public async ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep)
     {
-        var host = this.remotes.GetCurrentRemote().Host;
+        var host = this.remotes.HasCurrentRemote() ? this.remotes.GetCurrentRemote().Host : null;
 
-        try
-        {
-            await nextStep();
-        }
-        catch (ApiException e)
-        {
-            throw new CommandException($"{host} returned an error! Code is {e.ErrorCode.ToString()}");
-        }
-        catch (HttpRequestException e) when (e.InnerException is SocketException)
-        {
-            throw new CommandException($"Request to {host} failed! Reason is {e.InnerException.Message}");
-        }
+        await RequestHelpers.TryServerRequestAsync(async () => await nextStep(), host);
     }
 }

@@ -48,15 +48,7 @@ public sealed class RemoteAddCommand : ICommand
 
         await console.Output.WriteLineAsync("Checking for server availability...");
 
-        try
-        {
-            await this.tgsManager.PingServer(uri);
-        }
-        catch (ApiException e)
-        {
-            throw new CommandException(
-                $"Cannot add this remote because the API could not contact the given server.\n{e.Message}");
-        }
+        await RequestHelpers.TryServerRequestAsync(async () => await this.tgsManager.PingServer(uri), uri);
 
         // we're good
 
