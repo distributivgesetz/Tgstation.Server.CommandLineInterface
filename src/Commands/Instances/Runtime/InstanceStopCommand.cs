@@ -8,7 +8,7 @@ using Services;
 using Sessions;
 
 [Command("instance stop", Description = "Stops an instance.")]
-public sealed class InstanceStopCommand : BaseSessionCommand
+public sealed class InstanceStopCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
@@ -21,7 +21,8 @@ public sealed class InstanceStopCommand : BaseSessionCommand
     {
         var client = await this.Sessions.ResumeSession(context.CancellationToken);
         var token = context.CancellationToken;
-        var updateRequest = new InstanceUpdateRequest { Online = false, Id = this.Instance };
+        var updateRequest =
+            new InstanceUpdateRequest { Online = false, Id = (await this.SelectInstance(this.Instance, token)).Id };
         await client.Instances.Update(updateRequest, token);
     }
 }

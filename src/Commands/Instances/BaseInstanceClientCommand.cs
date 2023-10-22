@@ -1,5 +1,7 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
 
+using Api.Models;
+using Api.Models.Response;
 using Client.Components;
 using CliFx.Exceptions;
 using Models;
@@ -15,22 +17,21 @@ public abstract class BaseInstanceClientCommand : BaseSessionCommand
     protected async ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, CancellationToken token)
     {
         var client = await this.Sessions.ResumeSession(token);
+        return client.Instances.CreateClient(await this.SelectInstance(target, token));
+    }
+
+    protected async ValueTask<Instance> SelectInstance(InstanceSelector target, CancellationToken token)
+    {
+        var client = await this.Sessions.ResumeSession(token);
 
         if (target.Id != null)
         {
-            return client.Instances.CreateClient(target);
+            return (Instance) target;
         }
 
         var res = (await client.Instances.List(null, token)).FirstOrDefault(i =>
             i.Name!.StartsWith(target.Name!, StringComparison.InvariantCulture));
 
-        if (res == null)
-        {
-            throw new CommandException("Instance not found");
-        }
-
-        target = new InstanceSelector(res.Id!.Value);
-
-        return client.Instances.CreateClient(target);
+        return res ?? throw new CommandException("Instance not found");
     }
 }

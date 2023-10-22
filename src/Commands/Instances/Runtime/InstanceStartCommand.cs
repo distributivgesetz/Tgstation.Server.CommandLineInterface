@@ -8,7 +8,7 @@ using Services;
 using Sessions;
 
 [Command("instance start", Description = "Starts an instance.")]
-public sealed class InstanceStartCommand : BaseSessionCommand
+public sealed class InstanceStartCommand : BaseInstanceClientCommand
 {
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
@@ -21,7 +21,8 @@ public sealed class InstanceStartCommand : BaseSessionCommand
     {
         var token = context.CancellationToken;
         var client = await this.Sessions.ResumeSession(token);
-        var updateRequest = new InstanceUpdateRequest { Online = true, Id = this.Instance };
+        var updateRequest =
+            new InstanceUpdateRequest { Online = true, Id = (await this.SelectInstance(this.Instance, token)).Id };
         await client.Instances.Update(updateRequest, token);
     }
 }

@@ -4,7 +4,7 @@ using Api.Models;
 using Api.Models.Response;
 using CliFx.Extensibility;
 
-public sealed record InstanceSelector : ApiConverter<Instance>
+public sealed record InstanceSelector
 {
     public long? Id { get; }
     public string? Name { get; }
@@ -13,13 +13,10 @@ public sealed record InstanceSelector : ApiConverter<Instance>
 
     public InstanceSelector(string name) => this.Name = name;
 
-    protected override Instance ToApi() =>
-        this.Id != null ?
-            new InstanceResponse { Id = this.Id } :
-            throw new InvalidOperationException("Selector not translated");
-
-    public static implicit operator long(InstanceSelector inst) =>
-        inst.Id ?? throw new InvalidCastException("Selector not translated");
+    public static explicit operator Instance(InstanceSelector selector) => new InstanceResponse
+    {
+        Id = selector.Id ?? throw new InvalidCastException("Selector not translated")
+    };
 }
 
 public sealed class InstanceSelectorConverter : BindingConverter<InstanceSelector>
