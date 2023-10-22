@@ -22,7 +22,7 @@ public sealed class InstanceStopCommand : BaseInstanceClientCommand
         var client = await this.Sessions.ResumeSession(context.CancellationToken);
         var token = context.CancellationToken;
         var updateRequest =
-            new InstanceUpdateRequest { Online = false, Id = (await this.SelectInstance(this.Instance, token)).Id };
+            new InstanceUpdateRequest { Online = false, Id = await this.SelectInstanceId(this.Instance, token) };
         await client.Instances.Update(updateRequest, token);
     }
 }
