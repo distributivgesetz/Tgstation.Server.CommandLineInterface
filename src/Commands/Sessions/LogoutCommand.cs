@@ -18,7 +18,7 @@ public sealed class LogoutCommand : BaseCommand
     }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+        middlewares.UseMiddleware<EnsureCurrentRemoteMiddleware>();
 
     protected override ValueTask RunCommandAsync(ICommandContext context)
     {

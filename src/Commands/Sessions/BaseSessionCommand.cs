@@ -11,7 +11,7 @@ public abstract class BaseSessionCommand : BaseCommand
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+        middlewares.UseMiddleware<EnsureCurrentRemoteMiddleware>();
         middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
         middlewares.UseMiddleware<AutoLoginMiddleware>();
     }

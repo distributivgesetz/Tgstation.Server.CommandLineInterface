@@ -36,7 +36,7 @@ public sealed class StatusCommand : BaseCommand
                 throw new CommandException($"Remote {this.Remote} is not recognized") :
             this.remotes.HasCurrentRemote() ?
                 this.remotes.GetCurrentRemote() :
-                throw new CommandException(EnsureCurrentSessionMiddleware.RemoteUnsetErrorMessage);
+                throw new CommandException(EnsureCurrentRemoteMiddleware.RemoteUnsetErrorMessage);
 
         await context.Console.Output.WriteLineAsync("Fetching server status...");
 

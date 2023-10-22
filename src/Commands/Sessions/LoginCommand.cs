@@ -18,7 +18,7 @@ public sealed class LoginCommand : BaseCommand
     }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
-        middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
+        middlewares.UseMiddleware<EnsureCurrentRemoteMiddleware>();
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
