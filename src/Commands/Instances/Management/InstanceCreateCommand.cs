@@ -6,7 +6,7 @@ using Middlewares;
 using Services;
 using Sessions;
 
-[Command("instance create", Description = "Creates or attaches a new instance to the server.")]
+[Command("instance attach", Description = "Creates or attaches a new instance to the server.")]
 public sealed class InstanceCreateCommand : BaseSessionCommand
 {
     [CommandParameter(0, Description = "The name of the new instance.")]
