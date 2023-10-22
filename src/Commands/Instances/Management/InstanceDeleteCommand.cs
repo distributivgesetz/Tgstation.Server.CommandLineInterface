@@ -1,7 +1,7 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Management;
 
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Middlewares;
 using Models;
 using Services;
 using Sessions;
@@ -16,9 +16,9 @@ public sealed class InstanceDetachCommand : BaseSessionCommand
     {
     }
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSessionOrReprompt(console);
-        await client.Instances.Detach(this.Instance, console.RegisterCancellationHandler());
+        var client = await this.Sessions.ResumeSession(context.CancellationToken);
+        await client.Instances.Detach(this.Instance, context.CancellationToken);
     }
 }

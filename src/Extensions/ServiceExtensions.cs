@@ -1,7 +1,8 @@
-namespace Tgstation.Server.CommandLineInterface.Middlewares;
+namespace Tgstation.Server.CommandLineInterface.Extensions;
 
-using Commands;
 using Microsoft.Extensions.DependencyInjection;
+using Middlewares;
+using Commands;
 
 public static class ServiceExtensions
 {

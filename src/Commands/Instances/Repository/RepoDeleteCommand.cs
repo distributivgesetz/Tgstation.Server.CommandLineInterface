@@ -1,7 +1,7 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
 
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Middlewares;
 using Models;
 using Services;
 
@@ -15,9 +15,9 @@ public sealed class RepoDeleteCommand : BaseInstanceClientCommand
     {
     }
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, console);
-        await instanceClient.Repository.Delete(console.RegisterCancellationHandler());
+        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        await instanceClient.Repository.Delete(context.CancellationToken);
     }
 }

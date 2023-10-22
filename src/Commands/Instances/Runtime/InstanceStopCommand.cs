@@ -2,7 +2,7 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
 
 using Api.Models.Request;
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Middlewares;
 using Models;
 using Services;
 using Sessions;
@@ -17,10 +17,10 @@ public sealed class InstanceStopCommand : BaseSessionCommand
     {
     }
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSessionOrReprompt(console);
-        var token = console.RegisterCancellationHandler();
+        var client = await this.Sessions.ResumeSession(context.CancellationToken);
+        var token = context.CancellationToken;
         var updateRequest = new InstanceUpdateRequest { Online = false, Id = this.Instance };
         await client.Instances.Update(updateRequest, token);
     }

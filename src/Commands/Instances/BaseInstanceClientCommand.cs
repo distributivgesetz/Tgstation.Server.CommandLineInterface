@@ -1,7 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
 
 using Client.Components;
-using CliFx.Infrastructure;
 using Models;
 using Services;
 using Sessions;
@@ -12,9 +11,9 @@ public abstract class BaseInstanceClientCommand : BaseSessionCommand
     {
     }
 
-    protected async ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, IConsole console)
+    protected async ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, CancellationToken token)
     {
-        var client = await this.Sessions.ResumeSessionOrReprompt(console);
+        var client = await this.Sessions.ResumeSession(token);
         return client.Instances.CreateClient(target);
     }
 }

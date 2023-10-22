@@ -9,7 +9,7 @@ public class RequestFailHandlerMiddleware : ICommandMiddleware
 
     public RequestFailHandlerMiddleware(IRemoteRegistry remotes) => this.remotes = remotes;
 
-    public async ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep)
+    public async ValueTask HandleCommandAsync(ICommandContext context, PipelineNext nextStep)
     {
         var host = this.remotes.HasCurrentRemote() ? this.remotes.GetCurrentRemote().Host : null;
 

@@ -1,7 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
 
 using CliFx.Attributes;
-using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
@@ -21,15 +20,15 @@ public sealed class LoginCommand : BaseCommand
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
         var remote = this.remotes.GetCurrentRemote();
 
         if (this.sessions.HasSession(remote.Name))
         {
-            await console.Output.WriteLineAsync($"Using session for {remote.Name}.");
+            await context.Console.Output.WriteLineAsync($"Using session for {remote.Name}.");
         }
 
-        await this.sessions.LoginToSession(console);
+        await this.sessions.LoginToSession(context.Console);
     }
 }

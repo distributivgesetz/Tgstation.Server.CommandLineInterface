@@ -2,7 +2,7 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
 
 using Api.Models.Request;
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Middlewares;
 using Models;
 using Services;
 
@@ -19,11 +19,11 @@ public class RepoCredentialsCommand : BaseInstanceClientCommand
     {
     }
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, console);
+        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
         await instanceClient.Repository.Update(
             new RepositoryUpdateRequest { AccessUser = this.AccessName, AccessToken = this.AccessPhrase },
-            console.RegisterCancellationHandler());
+            context.CancellationToken);
     }
 }

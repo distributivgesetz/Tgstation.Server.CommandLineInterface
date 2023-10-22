@@ -8,7 +8,7 @@ using Persistence;
 public interface ISessionManager
 {
     ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default);
-    ValueTask<IServerClient> ResumeSessionOrReprompt(IConsole console, CancellationToken token = default);
+    ValueTask<IServerClient> ResumeSession(CancellationToken token = default);
     bool HasSession(string remoteKey);
 
     ValueTask<IServerClient> LoginToSession(
@@ -38,16 +38,28 @@ public sealed class SessionManager : ISessionManager
 
     public async ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default)
     {
+        try
+        {
+            return await this.ResumeSession(token);
+        }
+        catch (BadLoginException)
+        {
+            return null;
+        }
+    }
+
+    public async ValueTask<IServerClient> ResumeSession(CancellationToken token = default)
+    {
         var currentRemote = this.remotes.GetCurrentRemote();
 
         if (!this.Sessions.Sessions.TryGetValue(currentRemote.Name, out var authSession))
         {
-            return null;
+            throw new BadLoginException("No session available");
         }
 
         if (authSession.ExpiryDate < DateTime.Now)
         {
-            return null;
+            throw new BadLoginException("Session has expired");
         }
 
         try
@@ -57,24 +69,8 @@ public sealed class SessionManager : ISessionManager
         }
         catch (ApiException)
         {
-            // ignored
+            throw new BadLoginException("Credentials are invalid");
         }
-
-        return null;
-    }
-
-    public async ValueTask<IServerClient> ResumeSessionOrReprompt(IConsole console, CancellationToken token = default)
-    {
-        var client = await this.TryResumeSession(token);
-
-        if (client != null)
-        {
-            return client;
-        }
-
-        this.DropSession(this.remotes.GetCurrentRemote().Name);
-
-        return await this.LoginToSession(console, cancellationToken: token);
     }
 
     public bool HasSession(string remoteKey) => this.Sessions.Sessions.ContainsKey(remoteKey);

@@ -13,6 +13,6 @@ public abstract class BaseSessionCommand : BaseCommand
     {
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
         middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
-        middlewares.UseMiddleware<UserUnauthorizedHandler>();
+        middlewares.UseMiddleware<AutoLoginMiddleware>();
     }
 }

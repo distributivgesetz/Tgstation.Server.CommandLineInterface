@@ -2,7 +2,8 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Remotes;
 
 using CliFx.Attributes;
 using CliFx.Exceptions;
-using CliFx.Infrastructure;
+using Extensions;
+using Middlewares;
 using Services;
 
 [Command("remote",
@@ -19,7 +20,7 @@ public sealed class RemoteCommand : BaseCommand
 
     public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
 
-    protected override ValueTask RunCommandAsync(IConsole console)
+    protected override ValueTask RunCommandAsync(ICommandContext context)
     {
         if (this.Unset)
         {
@@ -30,7 +31,7 @@ public sealed class RemoteCommand : BaseCommand
 
         if (this.Name == null)
         {
-            console.Output.WriteLine(this.remotes.HasCurrentRemote() ?
+            context.Console.WriteLine(this.remotes.HasCurrentRemote() ?
                 this.remotes.GetCurrentRemote().Name :
                 "No remote currently set.");
         }

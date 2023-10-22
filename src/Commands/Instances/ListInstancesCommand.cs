@@ -3,7 +3,8 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
 using System.Globalization;
 using System.Text;
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Extensions;
+using Middlewares;
 using Services;
 using Sessions;
 
@@ -18,11 +19,11 @@ public sealed class ListInstancesCommand : BaseSessionCommand
     public ListInstancesCommand(ISessionManager sessions, IRemoteRegistry remotes) : base(sessions) =>
         this.remotes = remotes;
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSessionOrReprompt(console);
+        var client = await this.Sessions.ResumeSession(context.CancellationToken);
 
-        var token = console.RegisterCancellationHandler();
+        var token = context.CancellationToken;
 
         var instances = await client.Instances.List(null, token);
 
@@ -55,6 +56,6 @@ public sealed class ListInstancesCommand : BaseSessionCommand
                 $"  Is Currently Moving On Disk: {instance.MoveJob != null}");
         }
 
-        await console.Output.WriteAsync(output, token);
+        await context.Console.WriteAsync(output, token);
     }
 }

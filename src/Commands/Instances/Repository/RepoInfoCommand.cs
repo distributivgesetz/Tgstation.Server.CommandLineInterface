@@ -2,7 +2,8 @@ namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Repository;
 
 using System.Text;
 using CliFx.Attributes;
-using CliFx.Infrastructure;
+using Extensions;
+using Middlewares;
 using Models;
 using Services;
 
@@ -16,10 +17,10 @@ public sealed class RepoInfoCommand : BaseInstanceClientCommand
     {
     }
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, console);
-        var info = await instanceClient.Repository.Read(console.RegisterCancellationHandler());
+        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var info = await instanceClient.Repository.Read(context.CancellationToken);
 
         var output = new StringBuilder();
 
@@ -29,6 +30,6 @@ public sealed class RepoInfoCommand : BaseInstanceClientCommand
         output.AppendLine(info.Origin!.ToString());
         output.AppendLine(info.Reference);
 
-        await console.Output.WriteAsync(output);
+        await context.Console.WriteAsync(output);
     }
 }

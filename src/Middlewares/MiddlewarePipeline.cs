@@ -10,16 +10,11 @@ public interface IMiddlewarePipelineConfigurator
 
 public interface IMiddlewarePipelineRunner
 {
-    ValueTask RunAsync(IConsole console, Func<IConsole, ValueTask> commandMain);
+    ValueTask RunAsync(IConsole console, Func<ICommandContext, ValueTask> commandMain);
 }
 
 public interface IMiddlewarePipeline : IMiddlewarePipelineRunner, IMiddlewarePipelineConfigurator
 {
-}
-
-public interface IMiddlewareContext
-{
-    IConsole Console { get; }
 }
 
 public sealed class MiddlewarePipeline : IMiddlewarePipeline
@@ -39,11 +34,11 @@ public sealed class MiddlewarePipeline : IMiddlewarePipeline
         this.middlewaresInUse.Add((ICommandMiddleware)ActivatorUtilities.CreateInstance(this.provider, typeof(T)));
     }
 
-    public ValueTask RunAsync(IConsole console, Func<IConsole, ValueTask> commandMain)
+    public ValueTask RunAsync(IConsole console, Func<ICommandContext, ValueTask> commandMain)
     {
-        var context = new MiddlewareContext(console);
+        var context = new CommandContext(console);
 
-        var next = new PipelineNext(() => commandMain(context.Console));
+        var next = new PipelineNext(() => commandMain(context));
 
         for (var index = this.middlewaresInUse.Count - 1; index >= 0; index--)
         {
@@ -53,12 +48,5 @@ public sealed class MiddlewarePipeline : IMiddlewarePipeline
         }
 
         return next();
-    }
-
-    private sealed class MiddlewareContext : IMiddlewareContext
-    {
-        public MiddlewareContext(IConsole console) => this.Console = console;
-
-        public IConsole Console { get; }
     }
 }

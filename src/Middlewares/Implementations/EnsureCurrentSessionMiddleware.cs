@@ -12,7 +12,7 @@ public class EnsureCurrentSessionMiddleware : ICommandMiddleware
 
     public EnsureCurrentSessionMiddleware(IRemoteRegistry remotes) => this.remotes = remotes;
 
-    public ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep)
+    public ValueTask HandleCommandAsync(ICommandContext context, PipelineNext nextStep)
     {
         if (!this.remotes.HasCurrentRemote())
         {

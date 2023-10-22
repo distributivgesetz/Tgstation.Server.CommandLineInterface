@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using CliFx;
 using Microsoft.Extensions.DependencyInjection;
 using Tgstation.Server.Client;
+using Tgstation.Server.CommandLineInterface.Extensions;
 using Tgstation.Server.CommandLineInterface.Middlewares;
 using Tgstation.Server.CommandLineInterface.Models;
 using Tgstation.Server.CommandLineInterface.Services;

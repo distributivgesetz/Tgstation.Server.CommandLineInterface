@@ -25,7 +25,7 @@ public abstract class BaseCommand : ICommand
     {
     }
 
-    protected abstract ValueTask RunCommandAsync(IConsole console);
+    protected abstract ValueTask RunCommandAsync(ICommandContext context);
 }
 
 public static class RequestHelpers

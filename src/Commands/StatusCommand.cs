@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using CliFx.Attributes;
 using CliFx.Exceptions;
-using CliFx.Infrastructure;
+using Extensions;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
@@ -28,7 +28,7 @@ public sealed class StatusCommand : BaseCommand
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
         middlewares.UseMiddleware<RequestFailHandlerMiddleware>();
 
-    protected override async ValueTask RunCommandAsync(IConsole console)
+    protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
         var currentRemote = this.Remote != null ?
             this.remotes.ContainsRemote(this.Remote) ?
@@ -38,7 +38,7 @@ public sealed class StatusCommand : BaseCommand
                 this.remotes.GetCurrentRemote() :
                 throw new CommandException(EnsureCurrentSessionMiddleware.RemoteUnsetErrorMessage);
 
-        await console.Output.WriteLineAsync("Fetching server status...");
+        await context.Console.Output.WriteLineAsync("Fetching server status...");
 
         var res = await this.manager.PingServer(currentRemote.Host);
 
@@ -70,6 +70,6 @@ public sealed class StatusCommand : BaseCommand
             $"User limit: {res.UserLimit} - User group limit: {res.UserGroupLimit} - " +
             $"Minimum password length: {res.MinimumPasswordLength}");
 
-        await console.Output.WriteAsync(statusReadout);
+        await context.Console.WriteAsync(statusReadout);
     }
 }

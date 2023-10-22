@@ -1,7 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Sessions;
 
 using CliFx.Attributes;
-using CliFx.Infrastructure;
 using Middlewares;
 using Middlewares.Implementations;
 using Services;
@@ -21,7 +20,7 @@ public sealed class LogoutCommand : BaseCommand
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares) =>
         middlewares.UseMiddleware<EnsureCurrentSessionMiddleware>();
 
-    protected override ValueTask RunCommandAsync(IConsole console)
+    protected override ValueTask RunCommandAsync(ICommandContext context)
     {
         var currentRemote = this.remotes.GetCurrentRemote();
 

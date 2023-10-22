@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public interface ICommandMiddleware
 {
-    ValueTask HandleCommandAsync(IMiddlewareContext context, PipelineNext nextStep);
+    ValueTask HandleCommandAsync(ICommandContext context, PipelineNext nextStep);
 }
 
 public delegate ValueTask PipelineNext();
