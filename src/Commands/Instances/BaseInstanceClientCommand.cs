@@ -21,7 +21,8 @@ public abstract class BaseInstanceClientCommand : BaseSessionCommand
             return client.Instances.CreateClient(target);
         }
 
-        var res = (await client.Instances.List(null, token)).FirstOrDefault(i => i.Name == target.Name);
+        var res = (await client.Instances.List(null, token)).FirstOrDefault(i =>
+            i.Name!.StartsWith(target.Name!, StringComparison.InvariantCulture));
 
         if (res == null)
         {
