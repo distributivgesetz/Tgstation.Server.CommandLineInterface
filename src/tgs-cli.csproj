@@ -1,13 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <AssemblyName>tgs</AssemblyName>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>Tgstation.Server.CommandLineInterface</RootNamespace>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <DebugType>embedded</DebugType>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <OutputType>Exe</OutputType>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RootNamespace>Tgstation.Server.CommandLineInterface</RootNamespace>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <InformationalVersion>$(AssemblyVersion) (test release)</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

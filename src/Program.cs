@@ -21,8 +21,8 @@ var sw = Stopwatch.StartNew();
 var app = new CliApplicationBuilder()
     .AddCommandsFromThisAssembly()
     .UseTypeActivator(ConfigureServices)
-    .SetExecutableName(ApplicationInfo.ApplicationName.ToLowerInvariant())
-    .SetVersion(ApplicationInfo.ApplicationVersion)
+    .SetExecutableName(ApplicationInfo.AppName.ToLowerInvariant())
+    .SetVersion(ApplicationInfo.AppVersionInfo)
     .SetDescription("Command line interface for tgstation-server")
     .Build();
 
