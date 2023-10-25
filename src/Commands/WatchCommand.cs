@@ -1,17 +1,18 @@
 namespace Tgstation.Server.CommandLineInterface.Commands;
 
+using System.Text;
 using Api.Models.Response;
 using Client.Components;
 using CliFx.Attributes;
-using ConsoleTables;
+using CliFx.Exceptions;
 using Extensions;
+using Instances;
 using Middlewares;
 using Models;
 using Services;
-using Sessions;
 
 [Command("watch", Description = "Display jobs in progress.")]
-public class WatchCommand : BaseSessionCommand
+public class WatchCommand : BaseInstanceClientCommand
 {
     [CommandOption("focus", 'i', Converter = typeof(InstanceSelectorConverter),
         Description = "Display the jobs of specific instances. Values can be separated by semicolons.")]
@@ -26,68 +27,139 @@ public class WatchCommand : BaseSessionCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var token = context.CancellationToken;
-        var client = await this.Sessions.ResumeSession(token);
-
-        var availableInstances = await client.Instances.List(null, token);
-
-        var jobWatchers = availableInstances
-            .Select(res => client.Instances.CreateClient(res))
-            .Select(inst => new JobWatcher(inst.Jobs, this.RunOnce))
-            .ToArray();
-
-        var jobWatcherRuns = jobWatchers.Select(jobWatcher => jobWatcher.Run(token)).ToArray();
-
-        const int maxColumns = 5;
-        var tableWriter = new ConsoleTable();
-        tableWriter.Configure(options => options.OutputTo = context.Console.Output);
-
-        var stringLength = 0; // important for flushing the previous results
-
-        while ((jobWatchers.Any(watcher => watcher.Responses != null || watcher.Responses?.Count != 0) || (jobWatcherRuns.Any(watcher => !watcher.IsCompleted) && token.IsCancellationRequested)))
+        try
         {
-            for (var i = 0; i < stringLength; i++)
+            context.Console.SetCursorVisible(false);
+
+            var userInterruptToken = context.CancellationToken;
+            var client = await this.Sessions.ResumeSession(userInterruptToken);
+
+            var watcherErrorToken = new CancellationToken();
+
+            using var watcherCancellationSource =
+                CancellationTokenSource.CreateLinkedTokenSource(userInterruptToken, watcherErrorToken);
+
+            var token = watcherCancellationSource.Token;
+
+            InstanceResponse[] availableInstances;
+
+            if (this.FocusOn != null)
             {
-                await context.Console.WriteAsync("\b \b");
-            }
-
-            var jobs = jobWatchers
-                .SelectMany(watcher => watcher.Responses?.ToArray() ?? Array.Empty<JobResponse>())
-                .ToArray();
-
-            var currentJobIndex = 0;
-
-            while (currentJobIndex < jobs.Length)
-            {
-                await context.Console.WriteLineAsync("in table");
-
-                tableWriter.Rows.Clear();
-                tableWriter.Columns.Clear();
-                for (var i = 0; i < maxColumns; i++)
+                availableInstances = new []
                 {
-                    currentJobIndex++;
-
-                    var ids = jobs.Select(job => job.Id.ToString() ?? "test").ToArray();
-                    var descriptions = jobs.Select(job => job.Description?.ToString() ?? ">:3c").ToArray();
-                    await context.Console.WriteLineAsync("to add");
-                    await context.Console.WriteLineAsync(ids.Length.ToString());
-                    await context.Console.WriteLineAsync(descriptions.Length.ToString());
-
-                    tableWriter.AddColumn(ids);
-                    tableWriter.AddRow(descriptions);
-                }
-                var output = tableWriter.ToMinimalString();
-                stringLength += output.Length + 1;
-                await context.Console.WriteLineAsync(output);
+                    await client.Instances.GetId(await this.SelectInstance(this.FocusOn, token), token)
+                };
+            }
+            else
+            {
+                availableInstances = (await client.Instances.List(null, token)).ToArray();
             }
 
-            Thread.Sleep(100);
-        }
+            var jobWatchers = availableInstances
+                .Select(res => client.Instances.CreateClient(res))
+                .Select(inst => new JobWatcher(inst.Jobs, this.RunOnce))
+                .Select(watcher => (Watcher: watcher, Task: watcher.Run(token)))
+                .ToList();
 
-        Task.WaitAll(jobWatcherRuns);
+            const int maxColumns = 5;
+            var tableWriter = new StringBuilder();
+            var tableDeleter = new StringBuilder();
+
+            var newLineCount = 0; // important for flushing the previous results
+
+            while (!token.IsCancellationRequested &&
+                   jobWatchers.Any(watcher =>
+                       watcher.Watcher.Responses != null || watcher.Watcher.Responses?.Count != 0 ||
+                       watcher.Task.IsCompleted))
+            {
+                tableWriter.Clear();
+                tableDeleter.Clear();
+
+                context.Console.CursorTop -= newLineCount;
+                for (var i = 0; i < newLineCount; i++)
+                {
+                    tableDeleter.Append(new string(' ', context.Console.WindowWidth)).Append('\n');
+                }
+
+                await context.Console.WriteAsync(tableDeleter, token);
+                context.Console.CursorTop -= newLineCount;
+
+                tableWriter.AppendLine("-----");
+
+                var jobs = jobWatchers
+                    .SelectMany(watcher => watcher.Watcher.Responses?.ToArray() ?? Array.Empty<JobResponse>())
+                    .ToArray();
+
+                var currentJobIndex = 0;
+
+                while (currentJobIndex < jobs.Length)
+                {
+                    if (jobWatchers.Any(watcher => watcher.Task.IsFaulted))
+                    {
+                        var failReason = new StringBuilder("Watching failed due to one or more errors.");
+
+                        foreach (var error in jobWatchers
+                                     .Select(w => w.Task)
+                                     .Where(task => task.Exception != null)
+                                     .Select(watcher => watcher.Exception!))
+                        {
+                            failReason.AppendLine(error.ToString());
+                        }
+
+                        watcherCancellationSource.Cancel();
+
+                        throw new CommandException(failReason.ToString());
+                    }
+
+                    var rangeStart = currentJobIndex;
+                    var rangeEnd = Math.Min(currentJobIndex + maxColumns, jobs.Length);
+                    currentJobIndex = rangeEnd;
+
+                    var tableJobs = jobs.Take(rangeStart..rangeEnd).ToArray();
+
+                    var jobDescriptions = tableJobs.Select(job =>
+                            (Id: job.Id.ToString()!, Description: job.Description?.ToString() ?? ">:3c", job.Progress))
+                        .ToArray();
+
+                    foreach (var jobDescription in jobDescriptions)
+                    {
+                        tableWriter.AppendLine(jobDescription.Id);
+                        tableWriter.AppendLine(jobDescription.Description);
+                        if (jobDescription.Progress != null)
+                        {
+                            tableWriter.AppendLine(GetProgressString(20, jobDescription.Progress.Value));
+                        }
+
+                        tableWriter.AppendLine("-----");
+                    }
+
+
+                    var output = tableWriter.ToString();
+                    newLineCount = output.Count(c => c == '\n');
+                    await context.Console.WriteAsync(output);
+                }
+
+                Thread.Sleep(100);
+            }
+
+            Task.WaitAll(jobWatchers.Select(w => w.Task).ToArray());
+
+            return;
+
+            static string GetProgressString(int totalLength, int progress)
+            {
+                var length = progress / (totalLength - 2);
+                return $"[{new string('=', (int)Math.Floor((double)length) - 1)}>" +
+                    $"{new string(' ', (int)(1 - Math.Floor((double)length)))}]";
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            // ignored
+        }
     }
 
-    private class JobWatcher
+    private sealed class JobWatcher
     {
         private readonly IJobsClient jobs;
         private readonly bool runOnce;
@@ -102,17 +174,16 @@ public class WatchCommand : BaseSessionCommand
 
         public async Task Run(CancellationToken token)
         {
-            do
+            try
             {
-                try
+                do
                 {
                     this.Responses = await this.jobs.List(null, token);
-                }
-                catch (TaskCanceledException)
-                {
-                    // fallthrough
-                }
-            } while (!token.IsCancellationRequested && !this.runOnce);
+                } while (!this.runOnce);
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }
