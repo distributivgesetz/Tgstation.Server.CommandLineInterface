@@ -13,6 +13,9 @@ public interface IPersistenceManager
 public sealed class PersistenceManager : IPersistenceManager
 {
     private readonly Dictionary<Type, string> typeToPrefsFilename = new();
+    private readonly IApplicationInfo info;
+
+    public PersistenceManager(IApplicationInfo info) => this.info = info;
 
     public T? ReadData<T>() where T : new()
     {
@@ -43,9 +46,8 @@ public sealed class PersistenceManager : IPersistenceManager
             return name;
         }
 
-        if (t.GetCustomAttributes(typeof(DataLocationAttribute),
-                    false)
-                .FirstOrDefault() is not DataLocationAttribute attr ||
+        if (t.GetCustomAttributes(typeof(DataLocationAttribute), false).FirstOrDefault()
+                is not DataLocationAttribute attr ||
             attr.Name is null)
         {
             throw new ArgumentException("Preferences does not have a file descriptor");
@@ -56,7 +58,7 @@ public sealed class PersistenceManager : IPersistenceManager
             throw new InvalidOperationException($"Duplicate preferences file definition found, type is {t.FullName}");
         }
 
-        this.typeToPrefsFilename.Add(t, attr.Name);
+        this.typeToPrefsFilename.Add(t, Path.Combine(this.info.BasePath, attr.Name));
 
         return this.typeToPrefsFilename[t];
     }

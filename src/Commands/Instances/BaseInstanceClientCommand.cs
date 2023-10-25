@@ -1,7 +1,6 @@
 namespace Tgstation.Server.CommandLineInterface.Commands.Instances;
 
 using Api.Models;
-using Api.Models.Response;
 using Client.Components;
 using CliFx.Exceptions;
 using Models;
