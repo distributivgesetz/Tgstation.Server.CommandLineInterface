@@ -12,8 +12,8 @@ public interface IPersistenceManager
 
 public sealed class PersistenceManager : IPersistenceManager
 {
-    private readonly Dictionary<Type, string> typeToPrefsFilename = new();
     private readonly IApplicationInfo info;
+    private readonly Dictionary<Type, string> typeToPrefsFilename = new();
 
     public PersistenceManager(IApplicationInfo info) => this.info = info;
 
@@ -67,6 +67,6 @@ public sealed class PersistenceManager : IPersistenceManager
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public sealed class DataLocationAttribute : Attribute
 {
-    public string Name { get; }
     public DataLocationAttribute(string name) => this.Name = name;
+    public string Name { get; }
 }

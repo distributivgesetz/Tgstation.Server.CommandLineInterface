@@ -9,6 +9,10 @@ using Services;
 [Command("instance repo config", Description = "Configures the repository settings of an instance.")]
 public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 {
+    public RepoConfigureCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
+
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
@@ -29,10 +33,6 @@ public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 
     [CommandOption("keep-tms", Description = "Whether auto updates should keep active test merges.")]
     public bool? KeepTestMerges { get; init; }
-
-    public RepoConfigureCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {

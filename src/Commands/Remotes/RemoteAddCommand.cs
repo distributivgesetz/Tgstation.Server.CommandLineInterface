@@ -12,6 +12,12 @@ public sealed class RemoteAddCommand : ICommand
     private readonly IRemoteRegistry remotes;
     private readonly ITgsClientManager tgsManager;
 
+    public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
+    {
+        this.remotes = remotes;
+        this.tgsManager = tgsManager;
+    }
+
     [CommandParameter(0, Description = "The name to use for this remote.")]
     public required string Name { get; init; }
 
@@ -19,12 +25,6 @@ public sealed class RemoteAddCommand : ICommand
     public required string Url { get; init; }
 
     [CommandOption("switch", 's')] public bool SwitchBranch { get; init; }
-
-    public RemoteAddCommand(IRemoteRegistry remotes, ITgsClientManager tgsManager)
-    {
-        this.remotes = remotes;
-        this.tgsManager = tgsManager;
-    }
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -63,6 +63,6 @@ public sealed class RemoteAddCommand : ICommand
         this.remotes.SaveRemotes();
 
         await console.Output.WriteLineAsync("New remote registered successfully." +
-                                            (this.SwitchBranch ? $" Switched to {this.Name}." : ""));
+            (this.SwitchBranch ? $" Switched to {this.Name}." : ""));
     }
 }

@@ -14,16 +14,16 @@ using Services;
 [Command("watch", Description = "Display jobs in progress.")]
 public class WatchCommand : BaseInstanceClientCommand
 {
+    public WatchCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
+
     [CommandOption("focus", 'i', Converter = typeof(InstanceSelectorConverter),
         Description = "Display the jobs of specific instances. Values can be separated by semicolons.")]
     public InstanceSelector? FocusOn { get; init; }
 
     [CommandOption("run-once", 'o', Description = "Fetch current jobs once, then exit.")]
     public bool RunOnce { get; init; }
-
-    public WatchCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
@@ -45,7 +45,7 @@ public class WatchCommand : BaseInstanceClientCommand
 
             if (this.FocusOn != null)
             {
-                availableInstances = new []
+                availableInstances = new[]
                 {
                     await client.Instances.GetId(await this.SelectInstance(this.FocusOn, token), token)
                 };
@@ -164,13 +164,13 @@ public class WatchCommand : BaseInstanceClientCommand
         private readonly IJobsClient jobs;
         private readonly bool runOnce;
 
-        public IReadOnlyList<JobResponse>? Responses { get; private set; }
-
         public JobWatcher(IJobsClient jobs, bool runOnce)
         {
             this.jobs = jobs;
             this.runOnce = runOnce;
         }
+
+        public IReadOnlyList<JobResponse>? Responses { get; private set; }
 
         public async Task Run(CancellationToken token)
         {

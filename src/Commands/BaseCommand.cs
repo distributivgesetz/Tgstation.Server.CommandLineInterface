@@ -41,8 +41,8 @@ public static class RequestHelpers
         catch (ApiException e) when (e.ErrorCode != null)
         {
             throw new CommandException($"{requestVerb} failed with an API error! ({e.ErrorCode})\n" +
-                                       $"{e.ErrorCode.Value.Describe()}" +
-                                       (e.AdditionalServerData != null ? $"\n{e.AdditionalServerData}" : ""));
+                $"{e.ErrorCode.Value.Describe()}" +
+                (e.AdditionalServerData != null ? $"\n{e.AdditionalServerData}" : ""));
         }
         catch (HttpRequestException e) when (e.InnerException is SocketException or AuthenticationException)
         {

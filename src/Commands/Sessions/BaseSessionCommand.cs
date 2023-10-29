@@ -6,8 +6,8 @@ using Services;
 
 public abstract class BaseSessionCommand : BaseCommand
 {
-    protected ISessionManager Sessions { get; set; }
     protected BaseSessionCommand(ISessionManager sessions) => this.Sessions = sessions;
+    protected ISessionManager Sessions { get; }
 
     protected override void ConfigureMiddlewares(IMiddlewarePipelineConfigurator middlewares)
     {

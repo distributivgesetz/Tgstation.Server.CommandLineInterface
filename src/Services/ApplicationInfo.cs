@@ -13,6 +13,10 @@ public interface IApplicationInfo
 
 public sealed class ApplicationInfo : IApplicationInfo
 {
+    public const string AppName = "tgs";
+    public static readonly string AppVersion;
+    public static readonly string AppVersionInfo;
+
     static ApplicationInfo()
     {
         var executingAssembly = Assembly.GetExecutingAssembly();
@@ -22,10 +26,6 @@ public sealed class ApplicationInfo : IApplicationInfo
             FileVersionInfo.GetVersionInfo(Environment.ProcessPath).ProductVersion ?? assemblyVersion :
             assemblyVersion;
     }
-
-    public const string AppName = "tgs";
-    public static readonly string AppVersion;
-    public static readonly string AppVersionInfo;
 
     public string Name => AppName;
     public string Version => AppVersion;

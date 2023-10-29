@@ -13,11 +13,11 @@ public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;
 
-    [CommandOption("brief", Description = "Display only instance names and IDs.")]
-    public bool Brief { get; init; }
-
     public ListInstancesCommand(ISessionManager sessions, IRemoteRegistry remotes) : base(sessions) =>
         this.remotes = remotes;
+
+    [CommandOption("brief", Description = "Display only instance names and IDs.")]
+    public bool Brief { get; init; }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
@@ -30,7 +30,7 @@ public sealed class ListInstancesCommand : BaseSessionCommand
         var output = new StringBuilder();
 
         output.Append(CultureInfo.InvariantCulture, $"All instances for {this.remotes.GetCurrentRemote().Host} " +
-                                                    $"(visible to current user):\n");
+            $"(visible to current user):\n");
 
         foreach (var instance in instances)
         {
@@ -49,7 +49,7 @@ public sealed class ListInstancesCommand : BaseSessionCommand
 
             output.AppendLine(CultureInfo.InvariantCulture, $"  Configuration Allowed: {instance.ConfigurationType}");
             output.AppendLine(CultureInfo.InvariantCulture, $"  Auto Update Interval: " +
-                                                            $"{(instance.AutoUpdateInterval == 0 ? "Disabled" : $"{instance.AutoUpdateInterval} minutes")}");
+                $"{(instance.AutoUpdateInterval == 0 ? "Disabled" : $"{instance.AutoUpdateInterval} minutes")}");
 
             output.AppendLine(CultureInfo.InvariantCulture, $"  Maximum Chat Bots: {instance.ChatBotLimit}");
             output.AppendLine(CultureInfo.InvariantCulture,

@@ -6,14 +6,14 @@ using Services;
 [DataLocation("instances")]
 public readonly record struct InstancesCache
 {
-    public Dictionary<string, RemoteKeyToInstance> Cache { get; }
-
     public InstancesCache() : this(new Dictionary<string, RemoteKeyToInstance>())
     {
     }
 
     [JsonConstructor]
     public InstancesCache(Dictionary<string, RemoteKeyToInstance> cache) => this.Cache = cache;
+
+    public Dictionary<string, RemoteKeyToInstance> Cache { get; }
 }
 
 public readonly record struct RemoteKeyToInstance(string Key, Dictionary<string, InstanceCacheItem> Instances);

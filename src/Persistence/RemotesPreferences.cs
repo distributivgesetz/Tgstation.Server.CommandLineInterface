@@ -6,9 +6,6 @@ using Services;
 [DataLocation("remotes")]
 public record struct RemotesPreferences
 {
-    public Dictionary<string, TgsRemote> Remotes { get; }
-    public string? Current { get; set; }
-
     public RemotesPreferences() : this(new Dictionary<string, TgsRemote>(), null)
     {
     }
@@ -19,6 +16,9 @@ public record struct RemotesPreferences
         this.Remotes = remotes;
         this.Current = current;
     }
+
+    public Dictionary<string, TgsRemote> Remotes { get; }
+    public string? Current { get; set; }
 }
 
 public readonly record struct TgsRemote(string Name, Uri Host);

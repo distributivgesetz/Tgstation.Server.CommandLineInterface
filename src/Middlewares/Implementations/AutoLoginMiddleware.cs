@@ -6,8 +6,8 @@ using Services;
 
 public class AutoLoginMiddleware : ICommandMiddleware
 {
-    private readonly ISessionManager sessions;
     private readonly IRemoteRegistry remotes;
+    private readonly ISessionManager sessions;
 
     public AutoLoginMiddleware(ISessionManager sessions, IRemoteRegistry remotes)
     {

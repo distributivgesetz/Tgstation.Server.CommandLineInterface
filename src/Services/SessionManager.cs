@@ -26,8 +26,6 @@ public sealed class SessionManager : ISessionManager
     private readonly IPersistenceManager prefs;
     private readonly IRemoteRegistry remotes;
 
-    private SessionPersistence Sessions { get; }
-
     public SessionManager(IRemoteRegistry remotes, ITgsClientManager clientFactory, IPersistenceManager prefs)
     {
         this.remotes = remotes;
@@ -35,6 +33,8 @@ public sealed class SessionManager : ISessionManager
         this.prefs = prefs;
         this.Sessions = prefs.ReadData<SessionPersistence>();
     }
+
+    private SessionPersistence Sessions { get; }
 
     public async ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default)
     {

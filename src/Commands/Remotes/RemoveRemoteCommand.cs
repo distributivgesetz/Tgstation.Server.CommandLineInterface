@@ -11,10 +11,10 @@ public sealed class RemoveRemoteCommand : ICommand
 {
     private readonly IRemoteRegistry remotes;
 
+    public RemoveRemoteCommand(IRemoteRegistry remotes) => this.remotes = remotes;
+
     [CommandParameter(0, Description = "The remote to be unregistered.")]
     public required string Name { get; init; }
-
-    public RemoveRemoteCommand(IRemoteRegistry remotes) => this.remotes = remotes;
 
     public ValueTask ExecuteAsync(IConsole console)
     {

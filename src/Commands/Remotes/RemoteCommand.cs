@@ -12,13 +12,13 @@ public sealed class RemoteCommand : BaseCommand
 {
     private readonly IRemoteRegistry remotes;
 
+    public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
+
     [CommandParameter(0, Description = "The name of the remote to set.", IsRequired = false)]
     public string? Name { get; init; }
 
     [CommandOption("unset", 'u', Description = "Unsets the current remote.")]
     public bool Unset { get; init; }
-
-    public RemoteCommand(IRemoteRegistry registry) => this.remotes = registry;
 
     protected override ValueTask RunCommandAsync(ICommandContext context)
     {

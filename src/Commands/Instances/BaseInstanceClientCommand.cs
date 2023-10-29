@@ -25,7 +25,7 @@ public abstract class BaseInstanceClientCommand : BaseSessionCommand
 
         if (target.Id != null)
         {
-            return (Instance) target;
+            return (Instance)target;
         }
 
         var res = (await client.Instances.List(null, token)).FirstOrDefault(i =>

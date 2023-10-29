@@ -6,12 +6,11 @@ using CliFx.Extensibility;
 
 public sealed record InstanceSelector
 {
-    public long? Id { get; }
-    public string? Name { get; }
-
     public InstanceSelector(long id) => this.Id = id;
 
     public InstanceSelector(string name) => this.Name = name;
+    public long? Id { get; }
+    public string? Name { get; }
 
     public static explicit operator Instance(InstanceSelector selector) => new InstanceResponse
     {

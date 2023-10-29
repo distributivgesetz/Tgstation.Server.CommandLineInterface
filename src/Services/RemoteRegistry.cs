@@ -20,14 +20,14 @@ public sealed class RemoteRegistry : IRemoteRegistry
     private readonly IPersistenceManager preferences;
     private RemotesPreferences remotes;
 
-    private TgsRemote? CurrentRemote =>
-        this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
-
     public RemoteRegistry(IPersistenceManager prefs)
     {
         this.preferences = prefs;
         this.remotes = this.preferences.ReadData<RemotesPreferences>();
     }
+
+    private TgsRemote? CurrentRemote =>
+        this.remotes.Current != null ? this.remotes.Remotes[this.remotes.Current] : null;
 
     public IReadOnlyCollection<string> AvailableRemotes => this.remotes.Remotes.Keys;
 

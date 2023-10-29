@@ -4,7 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using CliFx.Infrastructure;
 
-[SuppressMessage("CliFx", "CliFx_SystemConsoleShouldBeAvoided:Avoid calling `System.Console` where `CliFx.Infrastructure.IConsole` is available")]
+[SuppressMessage("CliFx",
+    "CliFx_SystemConsoleShouldBeAvoided:Avoid calling `System.Console` where `CliFx.Infrastructure.IConsole` is available")]
 public static class CliFxConsoleExtensions
 {
     public static void SetCursorVisible(this IConsole console, bool visible)
@@ -20,7 +21,8 @@ public static class CliFxConsoleExtensions
     public static Task WriteLineAsync(this IConsole console, string? message, CancellationToken token = default) =>
         console.Output.WriteLineAsync(message);
 
-    public static Task WriteLineAsync(this IConsole console, ReadOnlyMemory<char> message, CancellationToken token = default) =>
+    public static Task WriteLineAsync(this IConsole console, ReadOnlyMemory<char> message,
+        CancellationToken token = default) =>
         console.Output.WriteLineAsync(message, token);
 
     public static void Write(this IConsole console, string? message) => console.Output.Write(message);
@@ -33,6 +35,7 @@ public static class CliFxConsoleExtensions
     public static Task WriteAsync(this IConsole console, StringBuilder message, CancellationToken token = default) =>
         console.Output.WriteAsync(message, token);
 
-    public static Task WriteAsync(this IConsole console, ReadOnlyMemory<char> message, CancellationToken token = default) =>
+    public static Task WriteAsync(this IConsole console, ReadOnlyMemory<char> message,
+        CancellationToken token = default) =>
         console.Output.WriteAsync(message, token);
 }

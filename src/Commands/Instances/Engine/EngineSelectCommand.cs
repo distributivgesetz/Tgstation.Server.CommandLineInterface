@@ -10,16 +10,16 @@ using Services;
 [Command("instance engine select")]
 public class EngineSelectCommand : BaseInstanceClientCommand
 {
+    public EngineSelectCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
+
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Target { get; init; }
 
     [CommandOption("version", 'v')] public string? EngineVersion { get; init; }
 
     [CommandOption("file", 'z')] public string? FileName { get; init; }
-
-    public EngineSelectCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
@@ -36,10 +36,8 @@ public class EngineSelectCommand : BaseInstanceClientCommand
         if (Version.TryParse(this.EngineVersion!, out var parsedVersion))
         {
             var client = await this.RequestInstanceClient(this.Target, context.CancellationToken);
-            await client.Byond.SetActiveVersion(new ByondVersionRequest
-            {
-                Version = parsedVersion
-            }, null, context.CancellationToken);
+            await client.Byond.SetActiveVersion(new ByondVersionRequest {Version = parsedVersion}, null,
+                context.CancellationToken);
         }
         else
         {

@@ -9,6 +9,10 @@ using Services;
 [Command("instance repo clone", Description = "Clones a repository into an instance.")]
 public sealed class RepoCloneCommand : BaseInstanceClientCommand
 {
+    public RepoCloneCommand(ISessionManager sessions) : base(sessions)
+    {
+    }
+
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The target instance.")]
     public required InstanceSelector Instance { get; init; }
 
@@ -18,15 +22,11 @@ public sealed class RepoCloneCommand : BaseInstanceClientCommand
     [CommandOption("ref", 'r', Description = "The reference (branch) to clone.")]
     public string? Ref { get; init; }
 
-    public RepoCloneCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
-
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
         var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
         await instanceClient.Repository.Clone(
-            new RepositoryCreateRequest { Origin = this.RepositoryUrl, Reference = this.Ref },
+            new RepositoryCreateRequest {Origin = this.RepositoryUrl, Reference = this.Ref},
             context.CancellationToken);
     }
 }
