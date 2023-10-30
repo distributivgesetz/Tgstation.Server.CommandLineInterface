@@ -30,7 +30,6 @@ public sealed class LogoutCommand : BaseCommand
         }
 
         this.sessions.DropSession(currentRemote.Name);
-        this.sessions.SaveSessions();
         return default;
     }
 }

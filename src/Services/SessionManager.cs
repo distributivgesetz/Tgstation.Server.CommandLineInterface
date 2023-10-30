@@ -17,7 +17,6 @@ public interface ISessionManager
         CancellationToken cancellationToken = default);
 
     void DropSession(string key);
-    void SaveSessions();
 }
 
 public sealed class SessionManager : ISessionManager
@@ -130,9 +129,10 @@ public sealed class SessionManager : ISessionManager
         }
 
         this.Sessions.Sessions.Remove(key);
+        this.SaveSessions();
     }
 
-    public void SaveSessions() => this.prefs.WriteData(this.Sessions);
+    private void SaveSessions() => this.prefs.WriteData(this.Sessions);
 
     private static string ReadHiddenInput(IConsole console)
     {
