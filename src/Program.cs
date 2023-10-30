@@ -44,7 +44,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
     services.AddSingleton<IServerClientFactory, ServerClientFactory>(serviceProvider =>
     {
         var appInfo = serviceProvider.GetRequiredService<IApplicationInfo>();
-        return new ServerClientFactory(new ProductHeaderValue(appInfo.Name, appInfo.Version));
+        return new ServerClientFactory(new ProductHeaderValue(appInfo.FullName, appInfo.Version));
     });
 
     services.AddSingleton<IPersistenceManager, PersistenceManager>();

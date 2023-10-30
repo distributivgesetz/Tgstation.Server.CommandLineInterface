@@ -6,6 +6,7 @@ using System.Reflection;
 public interface IApplicationInfo
 {
     string Name { get; }
+    string FullName { get; }
     string Version { get; }
     string VersionInfo { get; }
     string BasePath { get; }
@@ -14,6 +15,7 @@ public interface IApplicationInfo
 public sealed class ApplicationInfo : IApplicationInfo
 {
     public const string AppName = "tgs";
+    public const string AppFullName = "TGS-CLI";
     public static readonly string AppVersion;
     public static readonly string AppVersionInfo;
 
@@ -28,6 +30,7 @@ public sealed class ApplicationInfo : IApplicationInfo
     }
 
     public string Name => AppName;
+    public string FullName => AppFullName;
     public string Version => AppVersion;
     public string VersionInfo => AppVersionInfo;
     public string BasePath => AppContext.BaseDirectory;
