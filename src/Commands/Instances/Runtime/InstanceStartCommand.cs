@@ -10,8 +10,8 @@ using Sessions;
 [Command("instance start", Description = "Starts an instance.")]
 public sealed class InstanceStartCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
     private readonly IInstanceManager instances;
+    private readonly ISessionManager sessions;
 
     public InstanceStartCommand(ISessionManager sessions, IInstanceManager instances)
     {

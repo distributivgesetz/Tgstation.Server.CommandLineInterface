@@ -10,8 +10,8 @@ using Sessions;
 [Command("instance stop", Description = "Stops an instance.")]
 public sealed class InstanceStopCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
     private readonly IInstanceManager instances;
+    private readonly ISessionManager sessions;
 
     public InstanceStopCommand(ISessionManager sessions, IInstanceManager instances)
     {
@@ -27,7 +27,10 @@ public sealed class InstanceStopCommand : BaseSessionCommand
         var client = await this.sessions.ResumeSession(context.CancellationToken);
         var token = context.CancellationToken;
         var updateRequest =
-            new InstanceUpdateRequest {Online = false, Id = await this.instances.SelectInstanceId(this.Instance, token)};
+            new InstanceUpdateRequest
+            {
+                Online = false, Id = await this.instances.SelectInstanceId(this.Instance, token)
+            };
         await client.Instances.Update(updateRequest, token);
     }
 }

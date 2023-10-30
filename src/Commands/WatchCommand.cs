@@ -14,8 +14,8 @@ using Sessions;
 [Command("watch", Description = "Display jobs in progress.")]
 public class WatchCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
     private readonly IInstanceManager instances;
+    private readonly ISessionManager sessions;
 
     public WatchCommand(ISessionManager sessions, IInstanceManager instances)
     {

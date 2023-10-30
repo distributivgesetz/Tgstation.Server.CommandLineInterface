@@ -9,8 +9,8 @@ using Sessions;
 [Command("instance detach", Description = "Detaches an instance.")]
 public sealed class InstanceDetachCommand : BaseSessionCommand
 {
-    private readonly ISessionManager sessions;
     private readonly IInstanceManager instances;
+    private readonly ISessionManager sessions;
 
     public InstanceDetachCommand(ISessionManager sessions, IInstanceManager instances)
     {
