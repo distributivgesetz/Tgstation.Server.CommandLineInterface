@@ -5,13 +5,14 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance repo config", Description = "Configures the repository settings of an instance.")]
-public sealed class RepoConfigureCommand : BaseInstanceClientCommand
+public sealed class RepoConfigureCommand : BaseSessionCommand
 {
-    public RepoConfigureCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public RepoConfigureCommand(ISessionManager sessions, IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
@@ -36,7 +37,7 @@ public sealed class RepoConfigureCommand : BaseInstanceClientCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var instanceClient = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
 
         await instanceClient.Repository.Update(
             new RepositoryUpdateRequest

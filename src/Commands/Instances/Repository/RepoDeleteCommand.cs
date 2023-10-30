@@ -4,20 +4,21 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance repo delete", Description = "Resets an instance's repository.")]
-public sealed class RepoDeleteCommand : BaseInstanceClientCommand
+public sealed class RepoDeleteCommand : BaseSessionCommand
 {
-    public RepoDeleteCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public RepoDeleteCommand(IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var instanceClient = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
         await instanceClient.Repository.Delete(context.CancellationToken);
     }
 }

@@ -5,13 +5,14 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance repo clone", Description = "Clones a repository into an instance.")]
-public sealed class RepoCloneCommand : BaseInstanceClientCommand
+public sealed class RepoCloneCommand : BaseSessionCommand
 {
-    public RepoCloneCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public RepoCloneCommand(ISessionManager sessions, IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The target instance.")]
     public required InstanceSelector Instance { get; init; }
@@ -24,7 +25,7 @@ public sealed class RepoCloneCommand : BaseInstanceClientCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var instanceClient = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
         await instanceClient.Repository.Clone(
             new RepositoryCreateRequest {Origin = this.RepositoryUrl, Reference = this.Ref},
             context.CancellationToken);

@@ -9,9 +9,9 @@ using Sessions;
 [Command("instance attach", Description = "Creates or attaches a new instance to the server.")]
 public sealed class InstanceCreateCommand : BaseSessionCommand
 {
-    public InstanceCreateCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly ISessionManager sessions;
+
+    public InstanceCreateCommand(ISessionManager sessions) => this.sessions = sessions;
 
     [CommandParameter(0, Description = "The name of the new instance.")]
     public required string Name { get; init; }
@@ -21,7 +21,7 @@ public sealed class InstanceCreateCommand : BaseSessionCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSession(context.CancellationToken);
+        var client = await this.sessions.ResumeSession(context.CancellationToken);
         var request = new InstanceCreateRequest {Name = this.Name, Path = this.Path};
         await client.Instances.CreateOrAttach(request, context.CancellationToken);
     }

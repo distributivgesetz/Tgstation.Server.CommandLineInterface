@@ -6,16 +6,21 @@ using Client.Components;
 using CliFx.Attributes;
 using CliFx.Exceptions;
 using Extensions;
-using Instances;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("watch", Description = "Display jobs in progress.")]
-public class WatchCommand : BaseInstanceClientCommand
+public class WatchCommand : BaseSessionCommand
 {
-    public WatchCommand(ISessionManager sessions) : base(sessions)
+    private readonly ISessionManager sessions;
+    private readonly IInstanceManager instances;
+
+    public WatchCommand(ISessionManager sessions, IInstanceManager instances)
     {
+        this.sessions = sessions;
+        this.instances = instances;
     }
 
     [CommandOption("focus", 'i', Converter = typeof(InstanceSelectorConverter),
@@ -32,7 +37,7 @@ public class WatchCommand : BaseInstanceClientCommand
             context.Console.SetCursorVisible(false);
 
             var userInterruptToken = context.CancellationToken;
-            var client = await this.Sessions.ResumeSession(userInterruptToken);
+            var client = await this.sessions.ResumeSession(userInterruptToken);
 
             var watcherErrorToken = new CancellationToken();
 
@@ -47,7 +52,7 @@ public class WatchCommand : BaseInstanceClientCommand
             {
                 availableInstances = new[]
                 {
-                    await client.Instances.GetId(await this.SelectInstance(this.FocusOn, token), token)
+                    await client.Instances.GetId(await this.instances.SelectInstance(this.FocusOn, token), token)
                 };
             }
             else

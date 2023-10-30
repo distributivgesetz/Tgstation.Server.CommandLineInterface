@@ -6,13 +6,14 @@ using CliFx.Exceptions;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance engine select")]
-public class EngineSelectCommand : BaseInstanceClientCommand
+public class EngineSelectCommand : BaseSessionCommand
 {
-    public EngineSelectCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public EngineSelectCommand(IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Target { get; init; }
@@ -35,7 +36,7 @@ public class EngineSelectCommand : BaseInstanceClientCommand
 
         if (Version.TryParse(this.EngineVersion!, out var parsedVersion))
         {
-            var client = await this.RequestInstanceClient(this.Target, context.CancellationToken);
+            var client = await this.instances.RequestInstanceClient(this.Target, context.CancellationToken);
             await client.Byond.SetActiveVersion(new ByondVersionRequest {Version = parsedVersion}, null,
                 context.CancellationToken);
         }

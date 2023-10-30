@@ -6,20 +6,21 @@ using Extensions;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance repo", Description = "Displays information about an instance's repository and its settings.")]
-public sealed class RepoInfoCommand : BaseInstanceClientCommand
+public sealed class RepoInfoCommand : BaseSessionCommand
 {
-    public RepoInfoCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public RepoInfoCommand(IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var instanceClient = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
         var info = await instanceClient.Repository.Read(context.CancellationToken);
 
         var output = new StringBuilder();

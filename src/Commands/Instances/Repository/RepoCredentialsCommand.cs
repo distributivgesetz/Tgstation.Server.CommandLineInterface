@@ -5,13 +5,14 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance repo credentials")]
-public class RepoCredentialsCommand : BaseInstanceClientCommand
+public class RepoCredentialsCommand : BaseSessionCommand
 {
-    public RepoCredentialsCommand(ISessionManager sessions) : base(sessions)
-    {
-    }
+    private readonly IInstanceManager instances;
+
+    public RepoCredentialsCommand(IInstanceManager instances) => this.instances = instances;
 
     [CommandParameter(0)] public required InstanceSelector Instance { get; init; }
 
@@ -21,7 +22,7 @@ public class RepoCredentialsCommand : BaseInstanceClientCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var instanceClient = await this.RequestInstanceClient(this.Instance, context.CancellationToken);
+        var instanceClient = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
         await instanceClient.Repository.Update(
             new RepositoryUpdateRequest {AccessUser = this.AccessName, AccessToken = this.AccessPhrase},
             context.CancellationToken);

@@ -12,16 +12,20 @@ using Sessions;
 public sealed class ListInstancesCommand : BaseSessionCommand
 {
     private readonly IRemoteRegistry remotes;
+    private readonly ISessionManager sessions;
 
-    public ListInstancesCommand(ISessionManager sessions, IRemoteRegistry remotes) : base(sessions) =>
+    public ListInstancesCommand(IRemoteRegistry remotes, ISessionManager sessions)
+    {
         this.remotes = remotes;
+        this.sessions = sessions;
+    }
 
     [CommandOption("brief", Description = "Display only instance names and IDs.")]
     public bool Brief { get; init; }
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSession(context.CancellationToken);
+        var client = await this.sessions.ResumeSession(context.CancellationToken);
 
         var token = context.CancellationToken;
 

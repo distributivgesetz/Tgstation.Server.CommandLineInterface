@@ -4,12 +4,18 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance detach", Description = "Detaches an instance.")]
-public sealed class InstanceDetachCommand : BaseInstanceClientCommand
+public sealed class InstanceDetachCommand : BaseSessionCommand
 {
-    public InstanceDetachCommand(ISessionManager sessions) : base(sessions)
+    private readonly ISessionManager sessions;
+    private readonly IInstanceManager instances;
+
+    public InstanceDetachCommand(ISessionManager sessions, IInstanceManager instances)
     {
+        this.sessions = sessions;
+        this.instances = instances;
     }
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
@@ -17,8 +23,8 @@ public sealed class InstanceDetachCommand : BaseInstanceClientCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSession(context.CancellationToken);
-        await client.Instances.Detach(await this.SelectInstance(this.Instance, context.CancellationToken),
+        var client = await this.sessions.ResumeSession(context.CancellationToken);
+        await client.Instances.Detach(await this.instances.SelectInstance(this.Instance, context.CancellationToken),
             context.CancellationToken);
     }
 }

@@ -5,12 +5,18 @@ using CliFx.Attributes;
 using Middlewares;
 using Models;
 using Services;
+using Sessions;
 
 [Command("instance stop", Description = "Stops an instance.")]
-public sealed class InstanceStopCommand : BaseInstanceClientCommand
+public sealed class InstanceStopCommand : BaseSessionCommand
 {
-    public InstanceStopCommand(ISessionManager sessions) : base(sessions)
+    private readonly ISessionManager sessions;
+    private readonly IInstanceManager instances;
+
+    public InstanceStopCommand(ISessionManager sessions, IInstanceManager instances)
     {
+        this.sessions = sessions;
+        this.instances = instances;
     }
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
@@ -18,10 +24,10 @@ public sealed class InstanceStopCommand : BaseInstanceClientCommand
 
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
-        var client = await this.Sessions.ResumeSession(context.CancellationToken);
+        var client = await this.sessions.ResumeSession(context.CancellationToken);
         var token = context.CancellationToken;
         var updateRequest =
-            new InstanceUpdateRequest {Online = false, Id = await this.SelectInstanceId(this.Instance, token)};
+            new InstanceUpdateRequest {Online = false, Id = await this.instances.SelectInstanceId(this.Instance, token)};
         await client.Instances.Update(updateRequest, token);
     }
 }
