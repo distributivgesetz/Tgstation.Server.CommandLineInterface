@@ -26,7 +26,7 @@ public class EngineSelectCommand : BaseSessionCommand
     {
         if (!((this.EngineVersion == null) ^ (this.FileName == null)))
         {
-            throw new CommandException("Please specify either a file or an engine version string.");
+            throw new CommandException("Please specify either a file or an engine version.");
         }
 
         if (this.FileName != null)
