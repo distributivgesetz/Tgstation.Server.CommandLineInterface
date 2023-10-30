@@ -18,7 +18,8 @@ public class EngineSelectCommand : BaseSessionCommand
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Target { get; init; }
 
-    [CommandOption("version", 'v')] public string? EngineVersion { get; init; }
+    [CommandOption("version", 'v', Converter = typeof(VersionConverter))]
+    public Version? EngineVersion { get; init; }
 
     [CommandOption("file", 'z')] public string? FileName { get; init; }
 
@@ -34,15 +35,8 @@ public class EngineSelectCommand : BaseSessionCommand
             throw new NotImplementedException("Uploading custom versions is not supported yet");
         }
 
-        if (Version.TryParse(this.EngineVersion!, out var parsedVersion))
-        {
-            var client = await this.instances.RequestInstanceClient(this.Target, context.CancellationToken);
-            await client.Byond.SetActiveVersion(new ByondVersionRequest {Version = parsedVersion}, null,
-                context.CancellationToken);
-        }
-        else
-        {
-            throw new CommandException($"Engine version {this.EngineVersion} is invalid");
-        }
+        var client = await this.instances.RequestInstanceClient(this.Target, context.CancellationToken);
+        await client.Byond.SetActiveVersion(new ByondVersionRequest {Version = this.EngineVersion}, null,
+            context.CancellationToken);
     }
 }
