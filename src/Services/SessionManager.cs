@@ -26,6 +26,10 @@ public sealed class SessionManager : ISessionManager
     private readonly IPersistenceManager prefs;
     private readonly IRemoteRegistry remotes;
 
+    private IServerClient? CachedClient { get; set; }
+
+    private SessionPersistence Sessions { get; }
+
     public SessionManager(IRemoteRegistry remotes, ITgsClientManager clientFactory, IPersistenceManager prefs)
     {
         this.remotes = remotes;
@@ -33,8 +37,6 @@ public sealed class SessionManager : ISessionManager
         this.prefs = prefs;
         this.Sessions = prefs.ReadData<SessionPersistence>();
     }
-
-    private SessionPersistence Sessions { get; }
 
     public async ValueTask<IServerClient?> TryResumeSession(CancellationToken token = default)
     {
@@ -50,6 +52,11 @@ public sealed class SessionManager : ISessionManager
 
     public async ValueTask<IServerClient> ResumeSession(CancellationToken token = default)
     {
+        if (this.CachedClient != null)
+        {
+            return this.CachedClient;
+        }
+
         var currentRemote = this.remotes.GetCurrentRemote();
 
         if (!this.Sessions.Sessions.TryGetValue(currentRemote.Name, out var authSession))
@@ -64,8 +71,9 @@ public sealed class SessionManager : ISessionManager
 
         try
         {
-            return await this.clientFactory.CreateSessionWithToken(currentRemote.Host, authSession.Token,
+            this.CachedClient = await this.clientFactory.CreateSessionWithToken(currentRemote.Host, authSession.Token,
                 authSession.ExpiryDate, token);
+            return this.CachedClient;
         }
         catch (ApiException)
         {
@@ -108,6 +116,8 @@ public sealed class SessionManager : ISessionManager
         var res = client.Token;
         this.Sessions.Sessions.Add(currentRemote.Name, new AuthSession(currentRemote.Name, res.Bearer!, res.ExpiresAt));
         this.SaveSessions();
+
+        this.CachedClient = client;
 
         return client;
     }
