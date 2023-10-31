@@ -1,4 +1,4 @@
-namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Runtime;
+namespace Tgstation.Server.CommandLineInterface.Commands.Instances.Management;
 
 using Api.Models.Request;
 using CliFx.Attributes;
