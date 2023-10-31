@@ -6,8 +6,6 @@ public interface IPersistenceManager
 {
     T? ReadData<T>() where T : new();
     void WriteData<T>(T prefs) where T : new();
-    ValueTask<T?> ReadDataAsync<T>() where T : new();
-    ValueTask WriteDataAsync<T>(T prefs) where T : new();
 }
 
 public sealed class PersistenceManager : IPersistenceManager
@@ -29,14 +27,6 @@ public sealed class PersistenceManager : IPersistenceManager
         var serialized = JsonConvert.SerializeObject(prefs);
         var filePath = this.GetFileName(typeof(T));
         File.WriteAllText(filePath, serialized);
-    }
-
-    public ValueTask<T?> ReadDataAsync<T>() where T : new() => ValueTask.FromResult(this.ReadData<T>());
-
-    public ValueTask WriteDataAsync<T>(T prefs) where T : new()
-    {
-        this.WriteData(prefs);
-        return ValueTask.CompletedTask;
     }
 
     private string GetFileName(Type t)
