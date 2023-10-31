@@ -38,14 +38,10 @@ public sealed class MiddlewarePipeline : IMiddlewarePipeline
     {
         var context = new CommandContext(console);
 
-        var next = new PipelineNext(() => commandMain(context));
-
-        for (var index = this.middlewaresInUse.Count - 1; index >= 0; index--)
-        {
-            var middleware = this.middlewaresInUse[index];
-            var current = next;
-            next = () => middleware.HandleCommandAsync(context, current);
-        }
+        var next = this.middlewaresInUse.Aggregate(
+            () => commandMain(context),
+            (current, middleware) =>
+                () => middleware.HandleCommandAsync(context, new PipelineNext(current)));
 
         return next();
     }
