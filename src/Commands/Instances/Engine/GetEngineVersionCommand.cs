@@ -32,6 +32,7 @@ public class GetEngineVersionCommand : BaseSessionCommand
         {
             output.AppendLine(version.Version!.ToString());
         }
+
         await context.Console.WriteAsync(output.ToString());
     }
 }

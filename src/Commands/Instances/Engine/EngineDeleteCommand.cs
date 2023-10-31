@@ -23,7 +23,7 @@ public class EngineDeleteCommand : BaseSessionCommand
     protected override async ValueTask RunCommandAsync(ICommandContext context)
     {
         var client = await this.instances.RequestInstanceClient(this.Instance, context.CancellationToken);
-        await client.Byond.DeleteVersion(new ByondVersionDeleteRequest() {Version = this.Version}, context.CancellationToken);
+        await client.Byond.DeleteVersion(new ByondVersionDeleteRequest {Version = this.Version},
+            context.CancellationToken);
     }
-
 }
