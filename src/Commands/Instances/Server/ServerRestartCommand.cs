@@ -9,9 +9,9 @@ using Sessions;
 [Command("instance server restart")]
 public class ServerRestartCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public ServerRestartCommand(IInstanceManager instances) => this.instances = instances;
+    public ServerRestartCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

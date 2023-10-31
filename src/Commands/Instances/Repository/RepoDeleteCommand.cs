@@ -9,9 +9,9 @@ using Sessions;
 [Command("instance repo delete", Description = "Resets an instance's repository.")]
 public sealed class RepoDeleteCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public RepoDeleteCommand(IInstanceManager instances) => this.instances = instances;
+    public RepoDeleteCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }

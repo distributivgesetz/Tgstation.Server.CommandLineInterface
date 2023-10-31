@@ -12,9 +12,9 @@ using Sessions;
 [Command("instance server")]
 public class ServerInfoCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public ServerInfoCommand(IInstanceManager instances) => this.instances = instances;
+    public ServerInfoCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

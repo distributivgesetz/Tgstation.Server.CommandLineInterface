@@ -51,7 +51,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
     services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
     services.AddSingleton<ISessionManager, SessionManager>();
     services.AddSingleton<ITgsClientManager, TgsClientManager>();
-    services.AddSingleton<IInstanceManager, InstanceManager>();
+    services.AddSingleton<IInstanceClientManager, InstanceClientManager>();
     services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
 
     // Register converters here

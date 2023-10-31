@@ -11,9 +11,9 @@ using Sessions;
 [Command("instance engine select")]
 public class EngineSelectCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public EngineSelectCommand(IInstanceManager instances) => this.instances = instances;
+    public EngineSelectCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Target { get; init; }

@@ -10,9 +10,9 @@ using Sessions;
 [Command("instance engine delete")]
 public class EngineDeleteCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public EngineDeleteCommand(IInstanceManager instances) => this.instances = instances;
+    public EngineDeleteCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; set; }

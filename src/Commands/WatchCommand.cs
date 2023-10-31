@@ -14,10 +14,10 @@ using Sessions;
 [Command("watch", Description = "Display jobs in progress.")]
 public class WatchCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
     private readonly ISessionManager sessions;
 
-    public WatchCommand(ISessionManager sessions, IInstanceManager instances)
+    public WatchCommand(ISessionManager sessions, IInstanceClientManager instances)
     {
         this.sessions = sessions;
         this.instances = instances;

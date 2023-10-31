@@ -5,18 +5,18 @@ using Client.Components;
 using CliFx.Exceptions;
 using Models;
 
-public interface IInstanceManager
+public interface IInstanceClientManager
 {
     ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, CancellationToken token);
     ValueTask<Instance> SelectInstance(InstanceSelector target, CancellationToken token);
     ValueTask<long> SelectInstanceId(InstanceSelector target, CancellationToken token);
 }
 
-public class InstanceManager : IInstanceManager
+public class InstanceClientManager : IInstanceClientManager
 {
     private readonly SessionManager sessionManager;
 
-    public InstanceManager(SessionManager sessionManager) => this.sessionManager = sessionManager;
+    public InstanceClientManager(SessionManager sessionManager) => this.sessionManager = sessionManager;
 
     public async ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, CancellationToken token)
     {

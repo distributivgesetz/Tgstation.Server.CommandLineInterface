@@ -11,9 +11,9 @@ using Sessions;
 [Command("instance repo", Description = "Displays information about an instance's repository and its settings.")]
 public sealed class RepoInfoCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public RepoInfoCommand(IInstanceManager instances) => this.instances = instances;
+    public RepoInfoCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }

@@ -10,9 +10,10 @@ using Sessions;
 [Command("instance repo config", Description = "Configures the repository settings of an instance.")]
 public sealed class RepoConfigureCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public RepoConfigureCommand(ISessionManager sessions, IInstanceManager instances) => this.instances = instances;
+    public RepoConfigureCommand(ISessionManager sessions, IInstanceClientManager instances) =>
+        this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The instance target.")]
     public required InstanceSelector Instance { get; init; }

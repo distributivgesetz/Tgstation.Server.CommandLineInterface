@@ -9,9 +9,9 @@ using Sessions;
 [Command("instance deploy compile")]
 public class CreateDeploymentCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public CreateDeploymentCommand(IInstanceManager instances) => this.instances = instances;
+    public CreateDeploymentCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

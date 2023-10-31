@@ -9,10 +9,10 @@ using Sessions;
 [Command("instance detach", Description = "Detaches an instance.")]
 public sealed class InstanceDetachCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
     private readonly ISessionManager sessions;
 
-    public InstanceDetachCommand(ISessionManager sessions, IInstanceManager instances)
+    public InstanceDetachCommand(ISessionManager sessions, IInstanceClientManager instances)
     {
         this.sessions = sessions;
         this.instances = instances;

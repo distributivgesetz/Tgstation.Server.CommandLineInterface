@@ -10,9 +10,9 @@ using Sessions;
 [Command("instance repo credentials")]
 public class RepoCredentialsCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public RepoCredentialsCommand(IInstanceManager instances) => this.instances = instances;
+    public RepoCredentialsCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0)] public required InstanceSelector Instance { get; init; }
 

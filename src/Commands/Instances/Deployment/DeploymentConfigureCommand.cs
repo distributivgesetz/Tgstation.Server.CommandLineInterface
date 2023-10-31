@@ -11,9 +11,9 @@ using Sessions;
 [Command("instance deploy configure")]
 public class DeploymentConfigureCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public DeploymentConfigureCommand(IInstanceManager instances) => this.instances = instances;
+    public DeploymentConfigureCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

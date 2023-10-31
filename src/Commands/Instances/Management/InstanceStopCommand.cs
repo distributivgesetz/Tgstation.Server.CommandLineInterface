@@ -10,10 +10,10 @@ using Sessions;
 [Command("instance stop", Description = "Stops an instance.")]
 public sealed class InstanceStopCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
     private readonly ISessionManager sessions;
 
-    public InstanceStopCommand(ISessionManager sessions, IInstanceManager instances)
+    public InstanceStopCommand(ISessionManager sessions, IInstanceClientManager instances)
     {
         this.sessions = sessions;
         this.instances = instances;

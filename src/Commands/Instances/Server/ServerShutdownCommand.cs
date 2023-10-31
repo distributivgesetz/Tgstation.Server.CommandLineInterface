@@ -9,9 +9,9 @@ using Sessions;
 [Command("instance server shutdown")]
 public class ServerShutdownCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public ServerShutdownCommand(IInstanceManager instances) => this.instances = instances;
+    public ServerShutdownCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }

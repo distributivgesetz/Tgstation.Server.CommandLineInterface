@@ -10,9 +10,9 @@ using Sessions;
 [Command("instance repo clone", Description = "Clones a repository into an instance.")]
 public sealed class RepoCloneCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public RepoCloneCommand(ISessionManager sessions, IInstanceManager instances) => this.instances = instances;
+    public RepoCloneCommand(ISessionManager sessions, IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter), Description = "The target instance.")]
     public required InstanceSelector Instance { get; init; }

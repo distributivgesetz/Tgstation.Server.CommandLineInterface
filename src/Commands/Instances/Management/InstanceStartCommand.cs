@@ -10,10 +10,10 @@ using Sessions;
 [Command("instance start", Description = "Starts an instance.")]
 public sealed class InstanceStartCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
     private readonly ISessionManager sessions;
 
-    public InstanceStartCommand(ISessionManager sessions, IInstanceManager instances)
+    public InstanceStartCommand(ISessionManager sessions, IInstanceClientManager instances)
     {
         this.sessions = sessions;
         this.instances = instances;

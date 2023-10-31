@@ -12,9 +12,9 @@ using Sessions;
 [Command("instance engine")]
 public class GetEngineVersionCommand : BaseSessionCommand
 {
-    private readonly IInstanceManager instances;
+    private readonly IInstanceClientManager instances;
 
-    public GetEngineVersionCommand(IInstanceManager instances) => this.instances = instances;
+    public GetEngineVersionCommand(IInstanceClientManager instances) => this.instances = instances;
 
     [CommandParameter(0, Converter = typeof(InstanceSelectorConverter))]
     public required InstanceSelector Instance { get; init; }
