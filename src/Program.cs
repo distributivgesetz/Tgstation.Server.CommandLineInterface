@@ -47,6 +47,7 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
         return new ServerClientFactory(new ProductHeaderValue(appInfo.FullName, appInfo.Version));
     });
 
+    services.AddSingleton<IGroupManager, GroupManager>();
     services.AddSingleton<IInstanceClientManager, InstanceClientManager>();
     services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
     services.AddSingleton<IPersistenceManager, PersistenceManager>();
