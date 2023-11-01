@@ -1,7 +1,5 @@
 namespace Tgstation.Server.CommandLineInterface.Models;
 
-using Api.Models;
-using Api.Models.Response;
 using CliFx.Extensibility;
 
 public sealed record InstanceSelector
@@ -11,11 +9,6 @@ public sealed record InstanceSelector
     public InstanceSelector(string name) => this.Name = name;
     public long? Id { get; }
     public string? Name { get; }
-
-    public static explicit operator Instance(InstanceSelector selector) => new InstanceResponse
-    {
-        Id = selector.Id ?? throw new InvalidCastException("Selector not translated")
-    };
 }
 
 public sealed class InstanceSelectorConverter : BindingConverter<InstanceSelector>

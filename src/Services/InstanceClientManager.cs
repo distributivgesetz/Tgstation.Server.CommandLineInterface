@@ -1,6 +1,7 @@
 ﻿namespace Tgstation.Server.CommandLineInterface.Services;
 
 using Api.Models;
+using Api.Models.Response;
 using Client.Components;
 using CliFx.Exceptions;
 using Models;
@@ -14,9 +15,9 @@ public interface IInstanceClientManager
 
 public class InstanceClientManager : IInstanceClientManager
 {
-    private readonly SessionManager sessionManager;
+    private readonly ISessionManager sessionManager;
 
-    public InstanceClientManager(SessionManager sessionManager) => this.sessionManager = sessionManager;
+    public InstanceClientManager(ISessionManager sessionManager) => this.sessionManager = sessionManager;
 
     public async ValueTask<IInstanceClient> RequestInstanceClient(InstanceSelector target, CancellationToken token)
     {
@@ -30,7 +31,7 @@ public class InstanceClientManager : IInstanceClientManager
 
         if (target.Id != null)
         {
-            return (Instance)target;
+            return new InstanceResponse {Id = target.Id};
         }
 
         var res = (await client.Instances.List(null, token)).FirstOrDefault(i =>
