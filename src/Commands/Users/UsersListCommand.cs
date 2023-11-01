@@ -8,7 +8,7 @@ using Middlewares;
 using Services;
 using Sessions;
 
-[Command("user list")]
+[Command("users list")]
 public class UsersListCommand : BaseSessionCommand
 {
     private readonly ISessionManager sessions;
