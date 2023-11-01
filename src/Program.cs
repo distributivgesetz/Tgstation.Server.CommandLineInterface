@@ -47,12 +47,13 @@ static IServiceProvider ConfigureServices(IEnumerable<Type> commands)
         return new ServerClientFactory(new ProductHeaderValue(appInfo.FullName, appInfo.Version));
     });
 
+    services.AddSingleton<IInstanceClientManager, InstanceClientManager>();
+    services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
     services.AddSingleton<IPersistenceManager, PersistenceManager>();
     services.AddSingleton<IRemoteRegistry, RemoteRegistry>();
     services.AddSingleton<ISessionManager, SessionManager>();
     services.AddSingleton<ITgsClientManager, TgsClientManager>();
-    services.AddSingleton<IInstanceClientManager, InstanceClientManager>();
-    services.AddSingleton<IMiddlewarePipeline, MiddlewarePipeline>();
+    services.AddSingleton<IUserManager, UserManager>();
 
     // Register converters here
 

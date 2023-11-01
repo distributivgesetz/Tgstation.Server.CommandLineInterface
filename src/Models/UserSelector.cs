@@ -1,6 +1,5 @@
 namespace Tgstation.Server.CommandLineInterface.Models;
 
-using Api.Models;
 using CliFx.Extensibility;
 
 public sealed record UserSelector
@@ -10,11 +9,6 @@ public sealed record UserSelector
     public UserSelector(string name) => this.Name = name;
     public long? Id { get; }
     public string? Name { get; }
-
-    public static explicit operator UserName(UserSelector selector) => new()
-    {
-        Id = selector.Id ?? throw new InvalidCastException("Selector not translated")
-    };
 }
 
 public sealed class UserSelectorConverter : BindingConverter<UserSelector>
